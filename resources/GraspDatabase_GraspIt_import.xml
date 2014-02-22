@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<world>
+	<graspableBody>
+		<filename>../../workspace/PE_creating_scene/PLY-MODELS/shaft.ply</filename>
+		<transform>
+			<fullTransform>(+0.931125 +0.0132267 -0.268139 +0.246846)[+0.763264 +6.50164e-05 +170.67]</fullTransform>
+		</transform>
+	</graspableBody>
+	<robot>
+		<filename>models/robots/Schunk/Schunk.xml</filename>
+		<dofValues>+0 +0 +0 +0 +0 +0 +0 +0 </dofValues>
+		<transform>
+			<fullTransform>(+1 +0 +0 +0)[+0 -0.717332 -85.9544]</fullTransform>
+		</transform>
+	</robot>
+	<camera>
+		<position>-185.514 +779.715 +169.827</position>
+		<orientation>+0.0148475 +0.627537 +0.752832 -0.198044</orientation>
+		<focalDistance>+820.114</focalDistance>
+	</camera>
+</world>

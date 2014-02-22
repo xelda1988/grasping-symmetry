@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--TODO: Potentially - Add Spherical Symmetry, Add Global Pose  -->
+<objectdatabase>
+    <object ID="1" name="faceplate">
+      <symmetry ID="singleplane">
+	<layer>
+	  <point x="124.1632" y="0" z="40"></point>
+	  <point x="124.1632" y="0" z="0"></point>
+	  <point x="124.1632" y="150" z="0"></point>
+	</layer>
+      </symmetry>
+    </object>
+    <object ID="2" name="separator">
+      <symmetry ID="singleplane">
+	<layer>
+	  <point x="120" y="0" z="40"></point>
+	  <point x="120" y="0" z="0"></point>
+	  <point x="120" y="70" z="40"></point>
+	</layer>
+      </symmetry>
+    </object>
+    <object ID="3" name="pendulum-head">
+      <symmetry ID="axial">
+	<axis>
+	  <point x="29.9741" y="30" z="21.7522"></point>
+	  <point x="29.9741" y="30" z="40"></point>
+	</axis>
+      </symmetry>
+    </object>
+    <object ID="4" name="pendulum">
+      <symmetry ID="doubleplane">
+	<layer>
+	  <point x="45" y="245.3110" z="40"></point>
+	  <point x="45" y="85.3113" z="40"></point>
+	  <point x="45" y="85.3113" z="25"></point>
+	</layer>
+	<layer>
+	  <point x="25" y="85.3113" z="20"></point>
+	  <point x="25" y="245.3110" z="20"></point>
+	  <point x="65" y="245.3110" z="20"></point>
+	</layer>
+      </symmetry>
+    </object>
+    <object ID="5" name="shaft">
+      <symmetry ID="tripleplane">
+	<layer>
+	  <point x="0" y="22.5" z="80"></point>
+	  <point x="0" y="22.5" z="40"></point>
+	  <point x="45" y="22.5" z="40"></point>
+	</layer>
+	<layer>
+	  <point x="22.5" y="0" z="40"></point>
+	  <point x="22.5" y="0" z="80"></point>
+	  <point x="22.5" y="45" z="40"></point>
+	</layer>
+	<layer>
+	  <point x="22.5" y="45" z="60"></point>
+	  <point x="45" y="22.5" z="60"></point>
+	  <point x="22.5" y="0" z="60"></point>
+	</layer>
+      </symmetry>
+    </object>
+    <object ID="6" name="bolt">
+      <symmetry ID="axialsingleplane">
+	<axis>
+	  <point x="20" y="20" z="0"></point>
+	  <point x="20" y="20" z="120"></point>
+	</axis>
+	<layer>
+	  <point x="0" y="20" z="60"></point>
+	  <point x="20" y="39.7538" z="60"></point>
+	  <point x="20" y="0" z="60"></point>
+	</layer>
+      </symmetry>
+    </object>
+    <object ID="7" name="bolt-angular">
+      <symmetry ID="tripleplane">
+	<layer>
+	  <point x="35" y="20" z="120"></point>
+	  <point x="40" y="20" z="80"></point>
+	  <point x="35" y="20" z="0"></point>
+	</layer>
+	<layer>
+	  <point x="20" y="35" z="120"></point>
+	  <point x="20" y="40" z="80"></point>
+	  <point x="20" y="40" z="40"></point>
+	</layer>
+	<layer>
+	  <point x="0" y="40" z="60"></point>
+	  <point x="40" y="40" z="60"></point>
+	  <point x="40" y="0" z="60"></point>
+	</layer>
+      </symmetry>
+    </object>
+</objectdatabase>

@@ -19,5 +19,5 @@ Dependencies:
 Comments:
 
 * Grasps are defined as a sequence of end-effector poses and hand joints
-* Grasps can be loaded and exportet from GraspIt! .XML files
+* Grasps can be loaded and exportet from/to GraspIt! .XML files
    
