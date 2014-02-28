@@ -1,5 +1,5 @@
-#ifndef GRASP_H_
-#define GRASP_H_
+#ifndef GRASPSYMMETRIZER_GRASP_H_
+#define GRASPSYMMETRIZER_GRASP_H_
 
 #include <string>
 #include <Eigen/Dense>
@@ -21,25 +21,43 @@ class Grasp {
   
 public:
   
-  loadFromGraspItXml(std::string filePath); //Pointer to Element of XMLfile
-  saveToGraspItXml(std::string filePath);  //Needs preconfigured GraspItXml!
-  setGripper(const Gripper & gripper); //sets Dof and gripper Identifier
+  void loadFromGraspItXml(const std::string filePath); //Pointer to Element of XMLfile
+  void saveToGraspItXml(const std::string filePath);  //Needs preconfigured GraspItXml!
+  void setGripper(const Gripper & gripper); //sets Dof and gripper Identifier
   
-  loadFromXml(tinyxml2::XMLElement* graspElement);
-  addToXml(tinyxml2::XMLElement* graspElement);
+  void loadFromXml(tinyxml2::XMLElement* graspElement);
+  void addToXml(tinyxml2::XMLElement* graspElement);
+  
+  void printGrasp();
   
   //Constructors
-  Grasp(tinyxml2::XMLElement* graspElement, Gripper gripper) {
+  Grasp(tinyxml2::XMLElement* graspElement,const Gripper &  gripper) {
     loadFromXml(graspElement);
     setGripper(gripper);
   }
   
-  Grasp(std::string filePath, const Gripper & gripper) {
+  Grasp(const std::string filePath, const Gripper & gripper) {
     loadFromGraspItXml(filePath);
     setGripper(gripper);
   }
   //destructor
   ~Grasp();
+};
+
+class GraspDatabase {
+  
+  std::vector<Grasp> graspDb_;
+  
+public:
+  
+  void loadFromXml(const std::string filePath, const Gripper & gripper);
+  void printGraspDatabase();
+  
+  GraspDatabase(const std::string filePath, const Gripper & gripper) {
+    loadFromXml(filepath, gripper); //Pass gripper through constructor
+  }
+  
+  ~GraspDatabase();
 };
 
 #endif

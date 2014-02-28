@@ -1,5 +1,5 @@
-#ifndef GRIPPER_H_
-#define GRIPPER_H_
+#ifndef GRASPSYMMETRIZER_GRIPPER_H_
+#define GRASPSYMMETRIZER_GRIPPER_H_
 
 #include <string>
 #include <Eigen/Dense>
@@ -18,15 +18,7 @@ class Gripper {
   Pose globalPose_; //Global Pose offset of handframe, maybe needed later
   Eigen::MatrixXf jointPositions_; //Current Gripper Joint Position
   
-  //Symmetrystates
-  struct Constraint {
-   std::string type
-   std::vector<Eigen::MatrixXf> jointConfigurations;
-  }; //Here only type definition
-  
-  struct Symmetry {
-    std::vector<Constraint> symmmetries;
-  } Symmetry_; //also data definition
+  GripperSymmetry gripperSymmetry_; //also data definition
   
 public:
   
@@ -39,5 +31,6 @@ public:
   //destructor
   ~Gripper();
 };
+
 
 #endif

@@ -2,7 +2,7 @@
 <!--TODO: Potentially - Add Spherical Symmetry, Add Global Pose  -->
 <objectdatabase>
     <object ID="1" name="faceplate">
-      <symmetry ID="singleplane">
+      <symmetry type="singleplane">
 	<layer>
 	  <point x="124.1632" y="0" z="40"></point>
 	  <point x="124.1632" y="0" z="0"></point>
@@ -11,7 +11,7 @@
       </symmetry>
     </object>
     <object ID="2" name="separator">
-      <symmetry ID="singleplane">
+      <symmetry type="singleplane">
 	<layer>
 	  <point x="120" y="0" z="40"></point>
 	  <point x="120" y="0" z="0"></point>
@@ -20,7 +20,7 @@
       </symmetry>
     </object>
     <object ID="3" name="pendulum-head">
-      <symmetry ID="axial">
+      <symmetry type="axial">
 	<axis>
 	  <point x="29.9741" y="30" z="21.7522"></point>
 	  <point x="29.9741" y="30" z="40"></point>
@@ -28,7 +28,7 @@
       </symmetry>
     </object>
     <object ID="4" name="pendulum">
-      <symmetry ID="doubleplane">
+      <symmetry type="doubleplane">
 	<layer>
 	  <point x="45" y="245.3110" z="40"></point>
 	  <point x="45" y="85.3113" z="40"></point>
@@ -42,7 +42,7 @@
       </symmetry>
     </object>
     <object ID="5" name="shaft">
-      <symmetry ID="tripleplane">
+      <symmetry type="tripleplane">
 	<layer>
 	  <point x="0" y="22.5" z="80"></point>
 	  <point x="0" y="22.5" z="40"></point>
@@ -61,7 +61,7 @@
       </symmetry>
     </object>
     <object ID="6" name="bolt">
-      <symmetry ID="axialsingleplane">
+      <symmetry type="axialsingleplane">
 	<axis>
 	  <point x="20" y="20" z="0"></point>
 	  <point x="20" y="20" z="120"></point>
@@ -74,7 +74,7 @@
       </symmetry>
     </object>
     <object ID="7" name="bolt-angular">
-      <symmetry ID="tripleplane">
+      <symmetry type="tripleplane">
 	<layer>
 	  <point x="35" y="20" z="120"></point>
 	  <point x="40" y="20" z="80"></point>
