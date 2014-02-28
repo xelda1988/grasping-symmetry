@@ -6,10 +6,10 @@
     <joint_configuration j1="0" j2="0" j3="0" j4="0" j5="0" j6="0" j7="0"></joint_configuration>
     <symmetry name="singleplane">
       <!-- Symmetrystate 1: Restriction: J4,J5=J6,J7 -->
-      <restriction type="bool">
+      <constraint type="bool">
 	<joint_configuration j1="0" j2="0" j3="0" j4="1" j5="0" j6="1" j7="0"></joint_configuration>
 	<joint_configuration j1="0" j2="0" j3="0" j4="0" j5="1" j6="0" j7="1"></joint_configuration>
-      </restriction>
+      </constraint>
     </symmetry>
     <symmetry name="c3">
       <!-- Symmetrystate 2 (C30=120deg axial): Restriction: J2,J3=J4,J5=J6,J7; J1=30deg -->
