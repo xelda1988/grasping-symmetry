@@ -33,7 +33,7 @@ enum SymmetryType {
 enum ConstraintType {
   BOOL = 1,
   CONTINUOUS
-}
+};
 
 struct Axial {
   Axis3D axis1;
@@ -70,7 +70,7 @@ struct Constraint {
 struct GripperSymmetry {
   SymmetryType symmetryType;
   std::vector<Constraint> symmmetryData;
-}
+};
 
 //For Object
 union SymmetryData {
@@ -79,11 +79,11 @@ union SymmetryData {
   SinglePlane singlePlane;
   DoublePlane doublePlane;
   TriplePlane triplePlane;
-}
+};
 
 struct ObjectSymmetry {
   SymmetryType symmetryType;
   SymmetryData symmetryData;  
-}
+};
 
 #endif

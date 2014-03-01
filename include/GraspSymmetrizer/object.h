@@ -6,26 +6,42 @@
 #include <vector>
 
 #include "defs.h"
-#include "gripper.h"
 #include "../tinyxml2/tinyxml2.h"
 
 
 class Object {
   
-  int objecID_;
+  int objectID_;
   std::string objectName_;
-  ObjectSymmetry objectSymmetry_; //also data definition
+  ObjectSymmetry objectSymmetry_; //see defs.h for type
   
 public:
   
-  loadFromXml(std::string filePath); //Pointer to Element of XMLfile
-    
+  void loadFromXml(tinyxml2::XMLElement* objectElement); //Pointer to Element of XMLfile
+  void printObjectInfo();
+  
   //Constructors
-  Gripper(std::string filePath, Gripper gripper) {
-    loadFromXml(std::string filePath);
+  Object(tinyxml2::XMLElement* objectElement) {
+    loadFromXml(objectElement);
   }
   //destructor
-  ~Gripper();
+  ~Object();
 };
 
+class ObjectDatabase {
+  
+  std::vector<Object> objectDb_;
+  
+public:
+  
+  void loadFromXml(const std::string filePath);
+  void printObjectDatabase();
+  
+  ObjectDatabase (const std::string filePath){
+  
+    loadFromXml(filePath);
+  }
+  ~ObjectDatabase();
+};
+  
 #endif
