@@ -7,8 +7,12 @@
 #include <boost/variant.hpp>
 
 //Simple Types
+
+  
 typedef Eigen::Vector3f Point3D;
-typedef Eigen::Matrix4f Pose;
+typedef Eigen::Matrix4f PoseMat;
+typedef Eigen::Matrix < float, 6, 1> PoseEuler; // ZYX Convention (x,y,z,r,p,y)
+typedef Eigen::Matrix < float, 7, 1> PoseQuat; // Convention (x_pos,y_pos,z_pos,w, x_ori,y_ori,z_ori)
 
 struct Axis3D {
   Point3D point1;
@@ -73,7 +77,7 @@ struct GripperSymmetry {
   std::vector<Constraint> symmmetryData;
 };
 
-//For Object, only 
+//For non-Object, only 
 // union SymmetryData {
 //   Axial axial;
 //   AxialSinglePlane axialSinglePlane;

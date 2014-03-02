@@ -15,7 +15,7 @@ class Gripper {
   std::string gripperIdentifier_; //name of gripper
    
   int dof_; //Degree of freedom  
-  Pose globalPose_; //Global Pose offset of handframe, maybe needed later
+  PoseMat globalPose_; //Global Pose offset of handframe, maybe needed later
   Eigen::MatrixXf jointPositions_; //Current Gripper Joint Position
   
   GripperSymmetry gripperSymmetry_; //also data definition

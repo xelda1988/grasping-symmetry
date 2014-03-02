@@ -16,7 +16,7 @@ class Grasp {
   std::string objectIdentifier_;
   
   int dof_; //Degree of freedom  
-  std::vector<Pose> handPose_; //Pose of handframe
+  std::vector<PoseMat> handPose_; //Pose of handframe
   std::vector<Eigen::MatrixXf> jointPositions_;//Joint Positions (Length not known at compiletime)
   
 public:
