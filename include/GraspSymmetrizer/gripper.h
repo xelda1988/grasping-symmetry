@@ -22,11 +22,11 @@ class Gripper {
   
 public:
   
-  loadFromXml(std::string filePath); //Pointer to Element of XMLfile
+  void loadFromXml(std::string filePath); //Pointer to Element of XMLfile
     
   //Constructors
   Gripper(std::string filePath, Gripper gripper) {
-    loadFromXml(std::string filePath);
+    loadFromXml(filePath);
   }
   //destructor
   ~Gripper();

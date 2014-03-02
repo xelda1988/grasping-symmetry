@@ -54,7 +54,7 @@ public:
   void printGraspDatabase();
   
   GraspDatabase(const std::string filePath, const Gripper & gripper) {
-    loadFromXml(filepath, gripper); //Pass gripper through constructor
+    loadFromXml(filePath, gripper); //Pass gripper through constructor
   }
   
   ~GraspDatabase();

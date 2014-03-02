@@ -4,6 +4,7 @@
 #include <string>
 #include <Eigen/Dense>
 #include <vector>
+#include <boost/variant.hpp>
 
 //Simple Types
 typedef Eigen::Vector3f Point3D;
@@ -72,18 +73,21 @@ struct GripperSymmetry {
   std::vector<Constraint> symmmetryData;
 };
 
-//For Object
-union SymmetryData {
-  Axial axial;
-  AxialSinglePlane axialSinglePlane;
-  SinglePlane singlePlane;
-  DoublePlane doublePlane;
-  TriplePlane triplePlane;
-};
+//For Object, only 
+// union SymmetryData {
+//   Axial axial;
+//   AxialSinglePlane axialSinglePlane;
+//   SinglePlane singlePlane;
+//   DoublePlane doublePlane;
+//   TriplePlane triplePlane;
+// };
+
+//typdef  SymmetryData;
+
 
 struct ObjectSymmetry {
   SymmetryType symmetryType;
-  SymmetryData symmetryData;  
+  boost::variant<Axial, AxialSinglePlane, SinglePlane, DoublePlane, TriplePlane> symmetryData;  
 };
 
 #endif

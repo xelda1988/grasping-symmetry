@@ -6,17 +6,33 @@ PROJECT(GraspSymmetrizer)
 
 # External Libraries
 
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "/opt/ros/groovy/stacks/arm_navigation/constraint_aware_spline_smoother/cmake")
-FIND_PACKAGE(Eigen REQUIRED)
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH})
+
+FIND_PACKAGE(Eigen)
+FIND_PACKAGE(Boost)
 find_library(TINY_XML2 NAMES tinyxml2 PATHS ./include/tinyxml2/build)
 
 # Settings
+#message("Eigen_Dirs:" ${Eigen_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${Eigen_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(./include)
 
 # Sources
 SET(INSTALL_DIR ./bin)
+SET(USRPATH ./src/GraspSymmetrizer)
 SET(XMLTEST_SOURCES ./src/xml_test.cpp)
+
+SET( CLASSTEST_SOURCES 
+      ./src/test_classes.cpp 
+      ${USRPATH}/grasp.cpp 
+      ${USRPATH}/object.cpp 
+      ${USRPATH}/symmetry.cpp 
+      ${USRPATH}/util.cpp 
+      ${USRPATH}/gripper.cpp
+)
+  
 ADD_EXECUTABLE(../bin/xml_test ${XMLTEST_SOURCES})
+ADD_EXECUTABLE(classes_test ${CLASSTEST_SOURCES})
 TARGET_LINK_LIBRARIES(../bin/xml_test ${Eigen_LIBRARIES} ${TINY_XML2} )
-#INSTALL(TARGETS xml_test DESTINATION ${CMAKE_BINARY_DIR}/../bin	 )
+TARGET_LINK_LIBRARIES(classes_test ${Eigen_LIBRARIES} ${Boost_LIBRARIES} )
