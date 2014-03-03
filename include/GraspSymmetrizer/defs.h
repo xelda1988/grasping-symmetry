@@ -46,7 +46,7 @@ struct Axial {
 
 struct AxialSinglePlane {
   Axis3D axis1;
-  Layer3D layer1;  
+  Layer3D plane1;  
 };
 
 struct SinglePlane {

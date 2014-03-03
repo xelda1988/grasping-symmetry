@@ -134,35 +134,50 @@ void PoseQuatToPoseEuler(PoseEuler & poseEuler, const PoseQuat & poseQuat){
 //   
 //   //getAttributesFrom XML Element
 void getAttributeList(  std::vector<float> & floatList, const std::vector<std::string> & attributeNames,  const tinyxml2::XMLElement* xmlElementPtr){
- 
-  for(int i = 0; i < attributeNames.size(); i++)
-  {
-    float actualFloat = xmlElementPtr->FloatAttribute( attributeNames.at(i).c_str() );
-    floatList.push_back( actualFloat );
+  try
+  { 
+    for(int i = 0; i < attributeNames.size(); i++)
+    {
+      float actualFloat = xmlElementPtr->FloatAttribute( attributeNames.at(i).c_str() );
+      floatList.push_back( actualFloat );
+    }
   }
+  catch(std::exception &e)
+  {
+    std::cout << "[Exception] getAttributeList(std::vector<float>): Names seem not to match the XML attributes, exiting" << std::endl;
+    exit(EXIT_FAILURE);
+  }
+  
 }
 
 void getAttributeList(  std::vector<int> & intList, const std::vector<std::string> & attributeNames, const tinyxml2::XMLElement* xmlElementPtr){
-  
-  for(int i = 0; i < attributeNames.size(); i++)
+  try
+  {    
+    for(int i = 0; i < attributeNames.size(); i++)
+    {
+      float actualInt = xmlElementPtr->IntAttribute( attributeNames.at(i).c_str() );
+      intList.push_back( actualInt );
+    }
+  }
+  catch(std::exception &e)
   {
-    float actualInt = xmlElementPtr->IntAttribute( attributeNames.at(i).c_str() );
-    intList.push_back( actualInt );
+    std::cout << "[Exception] getAttributeList(std::vector<int>): Names seem not to match the XML attributes, exiting" << std::endl;
+    exit(EXIT_FAILURE);
   }
 }
 void getAttributeList(  std::vector<std::string> & stringList, const std::vector<std::string> & attributeNames, const tinyxml2::XMLElement* xmlElementPtr){
-  
-  for(int i = 0; i < attributeNames.size(); i++)
+  try
   {
-    const char* actualCharArray = xmlElementPtr->Attribute( attributeNames.at(i).c_str() );
-    stringList.push_back( CharArrayToString(actualCharArray) );
+    for(int i = 0; i < attributeNames.size(); i++)
+    {
+      const char* actualCharArray = xmlElementPtr->Attribute( attributeNames.at(i).c_str() );
+      stringList.push_back( CharArrayToString(actualCharArray) );
+    }
+  }
+  catch(std::exception &e)
+  {
+    std::cout << "[Exception] getAttributeListstd::vector<string>: Names seem not to match the XML attributes, exiting" << std::endl;
+    exit(EXIT_FAILURE);
   }
 }
-
-
-
-
-
-
-
 
