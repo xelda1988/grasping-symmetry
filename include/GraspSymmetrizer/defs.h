@@ -17,12 +17,23 @@ typedef Eigen::Matrix < float, 7, 1> PoseQuat; // Convention (x_pos,y_pos,z_pos,
 struct Axis3D {
   Point3D point1;
   Point3D point2;
+  void print(){
+    std::cout << "Axis3D: \n";
+    std::cout << point1.transpose() << std::endl;
+    std::cout << point2.transpose() << std::endl;
+  }
 };
 
 struct Layer3D {
   Point3D point1;
   Point3D point2;
   Point3D point3;
+  void print(){
+    std::cout << "Layer3D: \n";
+    std::cout << point1.transpose() << std::endl;
+    std::cout << point2.transpose() << std::endl;
+    std::cout << point3.transpose() << std::endl;
+  }
 };
 
 //Generic Symmetries
@@ -42,27 +53,52 @@ enum ConstraintType {
 
 struct Axial {
   Axis3D axis1;
+  void print(){
+    std::cout << "Axial: \n";
+    axis1.print();
+  }
 };
 
 struct AxialSinglePlane {
   Axis3D axis1;
-  Layer3D plane1;  
+  Layer3D plane1;
+  void print(){
+    std::cout << "AxialSinglePlane: \n";
+    axis1.print();
+    plane1.print();
+  }
 };
 
 struct SinglePlane {
   Layer3D plane1;
+  void print(){
+    std::cout << "SinglePlane: \n";
+    plane1.print();
+  }
+  
 };
 
 struct DoublePlane {
   Layer3D plane1;
   Layer3D plane2;
   Layer3D plane3;
+  void print(){
+    std::cout << "DoublePlane: \n";
+    plane1.print();
+    plane2.print();
+  }
 };
 
 struct TriplePlane {
   Layer3D plane1;
   Layer3D plane2;
   Layer3D plane3;
+  void print(){
+    std::cout << "TriplePlane: \n";
+    plane1.print();
+    plane2.print();
+    plane3.print();
+  }
 };
 
 

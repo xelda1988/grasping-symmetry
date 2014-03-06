@@ -3,7 +3,7 @@
 #include <sstream>
 
 //Basic Type Conversions  
-int CharArrayToInt(const char* charPtr){
+int charArrayToInt(const char* charPtr){
   
   int x;
   try
@@ -23,7 +23,7 @@ std::string CharArrayToString(const char* charPtr){
  return s; 
 }
 
-float CharArrayToFloat(const char* charPtr){
+float charArrayToFloat(const char* charPtr){
   float x;
   try
   {
@@ -37,20 +37,20 @@ float CharArrayToFloat(const char* charPtr){
   return x;
 }
 
-std::string IntToString(const int number){
+std::string intToString(const int number){
   std::stringstream ss;
   ss << number;
   return ss.str();
 }
   
-std::string FloatToString(const float number){
+std::string floatToString(const float number){
   std::stringstream ss;
   ss << number;
   return ss.str();
 }
 
 //Pose Conversions  
-void PoseEulerToPoseMat(PoseMat & poseMat, const PoseEuler & poseEuler){
+void poseEulerToPoseMat(PoseMat & poseMat, const PoseEuler & poseEuler){
   
   Eigen::Matrix3f rot;
   PoseMat posematrix;
@@ -64,12 +64,12 @@ void PoseEulerToPoseMat(PoseMat & poseMat, const PoseEuler & poseEuler){
   poseMat = posematrix;
 }
    
-void PoseEulerToPoseQuat(PoseQuat & poseQuat, const PoseEuler & poseEuler){
+void poseEulerToPoseQuat(PoseQuat & poseQuat, const PoseEuler & poseEuler){
   
   PoseMat poseMat;
   
   poseQuat.head(3)=poseEuler.head(3);
-  PoseEulerToPoseMat(poseMat, poseEuler);
+  poseEulerToPoseMat(poseMat, poseEuler);
   Eigen::Quaternionf quat(poseMat.block<3,3>(0,0));
   
   poseQuat(3)=quat.w();
@@ -78,7 +78,7 @@ void PoseEulerToPoseQuat(PoseQuat & poseQuat, const PoseEuler & poseEuler){
   poseQuat(6)=quat.z(); 
 }
 
-void PoseMatToPoseEuler(PoseEuler & poseEuler, const PoseMat & poseMat){
+void poseMatToPoseEuler(PoseEuler & poseEuler, const PoseMat & poseMat){
   
   PoseEuler pose;
   Eigen::Vector3f trans, angles;
@@ -94,7 +94,7 @@ void PoseMatToPoseEuler(PoseEuler & poseEuler, const PoseMat & poseMat){
   poseEuler = pose;
 }
    
-void PoseMatToPoseQuat(PoseQuat & poseQuat, const PoseMat & poseMat){
+void poseMatToPoseQuat(PoseQuat & poseQuat, const PoseMat & poseMat){
   
   Eigen::Quaternionf quat(poseMat.block<3,3>(0,0));
   
@@ -104,7 +104,7 @@ void PoseMatToPoseQuat(PoseQuat & poseQuat, const PoseMat & poseMat){
   poseQuat(5)=quat.y();
   poseQuat(6)=quat.z(); 
 }
-void PoseQuatToPoseMat(PoseMat & poseMat, const PoseQuat & poseQuat){
+void poseQuatToPoseMat(PoseMat & poseMat, const PoseQuat & poseQuat){
   
   Eigen::Vector3f trans;
   Eigen::Quaternionf quat;
@@ -126,10 +126,10 @@ void PoseQuatToPoseMat(PoseMat & poseMat, const PoseQuat & poseQuat){
   poseMat = posematrix;
 }
 //   
-void PoseQuatToPoseEuler(PoseEuler & poseEuler, const PoseQuat & poseQuat){
+void poseQuatToPoseEuler(PoseEuler & poseEuler, const PoseQuat & poseQuat){
   PoseMat poseMat;
-  PoseQuatToPoseMat(poseMat, poseQuat);
-  PoseMatToPoseEuler(poseEuler, poseMat);  
+  poseQuatToPoseMat(poseMat, poseQuat);
+  poseMatToPoseEuler(poseEuler, poseMat);  
 }
 //   
 //   //getAttributesFrom XML Element
@@ -176,8 +176,23 @@ void getAttributeList(  std::vector<std::string> & stringList, const std::vector
   }
   catch(std::exception &e)
   {
-    std::cout << "[Exception] getAttributeListstd::vector<string>: Names seem not to match the XML attributes, exiting" << std::endl;
+    std::cout << "[Exception] getAttributeList (std::vector<string>): Names seem not to match the XML attributes, exiting" << std::endl;
     exit(EXIT_FAILURE);
   }
 }
+
+void getSymmetryTypeFromString(SymmetryType & symmetryType, const std::string symmetryTypeStr){
+ 
+  if(symmetryTypeStr == "singleplane") symmetryType=SINGLEPLANE;
+  else if (symmetryTypeStr == "doubleplane") symmetryType=DOUBLEPLANE;
+  else if (symmetryTypeStr == "tripleplane") symmetryType=TRIPLEPLANE;
+  else if (symmetryTypeStr == "axial") symmetryType=AXIAL;
+  else if (symmetryTypeStr == "axialsingleplane") symmetryType=AXIALSINGLEPLANE;
+  else if (symmetryTypeStr == "c3") symmetryType=C3;
+  else 
+  {std::cout << "Objectsymmetry not correctly defined, exiting!\n";
+    exit(EXIT_FAILURE);
+  }
+}
+
 

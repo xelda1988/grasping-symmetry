@@ -13,8 +13,10 @@ The Software produces as OUTPUT:
 
 Dependencies:
 
-* Eigen3
+* Boost (1.46.1)
+* Eigen3 (3.0.5)
 * tinyXML2
+
 
 Comments:
 

@@ -1,5 +1,6 @@
 #include "GraspSymmetrizer/symmetry.h"
 
+/*
 void SymmetryOperation::computeSymmetries(){
   
   //Cases depending on Object Symmetry
@@ -45,3 +46,4 @@ void SymmetryOperation::computeSymmetries(){
   std::cout << "Symmetry Successfully computed!\n";
 
 }
+*/

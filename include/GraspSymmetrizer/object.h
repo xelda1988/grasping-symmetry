@@ -25,7 +25,7 @@ public:
     loadFromXml(objectElement);
   }
   //destructor
-  ~Object();
+  //~Object();
 };
 
 class ObjectDatabase {
@@ -41,7 +41,7 @@ public:
   
     loadFromXml(filePath);
   }
-  ~ObjectDatabase();
+  ~ObjectDatabase(){}
 };
   
 #endif

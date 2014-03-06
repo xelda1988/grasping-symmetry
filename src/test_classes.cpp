@@ -18,6 +18,20 @@ int main () {
   
   
   
+  //Test object.cpp
+  
+  XMLDocument doc;
+  doc.LoadFile("../resources/ObjectDatabase.xml");
+  
+  XMLElement * xeFaceplate= doc.FirstChildElement()->FirstChildElement("object");
+  
+  Object faceplate(xeFaceplate);
+  
+  faceplate.printObjectInfo();
+  
+  ObjectDatabase objectDb("../resources/ObjectDatabase.xml");
+  
+  objectDb.printObjectDatabase();
   
   
   
@@ -51,20 +65,20 @@ int main () {
   
   cout << "PoseMatStart: \n" << poseMat << endl;
   
-  PoseMatToPoseEuler(poseEuler, poseMat);
-  PoseMatToPoseQuat(poseQuat, poseMat);
+  poseMatToPoseEuler(poseEuler, poseMat);
+  poseMatToPoseQuat(poseQuat, poseMat);
   
   cout << "PoseEuler: " << poseEuler.transpose() << endl;
   cout << "PoseQuat: " << poseQuat.transpose() << endl;
   
-  PoseQuatToPoseMat(poseMat, poseQuat);
-  PoseQuatToPoseEuler(poseEuler, poseQuat);
+  poseQuatToPoseMat(poseMat, poseQuat);
+  poseQuatToPoseEuler(poseEuler, poseQuat);
   
   cout << "PoseMat: \n" << poseMat << endl;
   cout << "PoseEuler: " << poseEuler.transpose() << endl;
   
-  PoseEulerToPoseMat(poseMat, poseEuler);
-  PoseEulerToPoseQuat(poseQuat, poseEuler);
+  poseEulerToPoseMat(poseMat, poseEuler);
+  poseEulerToPoseQuat(poseQuat, poseEuler);
   
   cout << "PoseMat: \n" << poseMat << endl;
   cout << "PoseQuat: " << poseQuat.transpose() << endl;
