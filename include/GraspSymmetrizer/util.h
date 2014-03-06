@@ -39,7 +39,8 @@
   void getAttributeList(  std::vector<int> & intList, const std::vector<std::string> & AttributeNameList, const tinyxml2::XMLElement* xmlElementPtr);
   void getAttributeList(  std::vector<std::string> & stringList, const std::vector<std::string> & AttributeNameList, const tinyxml2::XMLElement* xmlElementPtr);
   
-  void getSymmetryTypeFromString(SymmetryType & symmetryType, const std::string);
+  void getSymmetryTypeFromString(SymmetryType & symmetryType, const std::string symmetryTypeStr);
+  void getConstraintTypeFromString(ConstraintType & constraintType, const std::string constrainTypeStr);
 
 //}
 

@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "defs.h"
-#include "gripper.h"
+//#include "gripper.h"
 #include "../tinyxml2/tinyxml2.h"
 
 
@@ -16,20 +16,20 @@ class Gripper {
    
   int dof_; //Degree of freedom  
   PoseMat globalPose_; //Global Pose offset of handframe, maybe needed later
-  Eigen::MatrixXf jointPositions_; //Current Gripper Joint Position
+  Eigen::VectorXf jointPositions_; //Current Gripper Joint Position
   
-  GripperSymmetry gripperSymmetry_; //also data definition
+  std::vector<GripperSymmetry> gripperSymmetry_; //also data definition
   
 public:
   
   void loadFromXml(std::string filePath); //Pointer to Element of XMLfile
-    
+  void printGripperInfo();  
   //Constructors
-  Gripper(std::string filePath, Gripper gripper) {
+  Gripper(std::string filePath) {
     loadFromXml(filePath);
   }
   //destructor
-  ~Gripper();
+  //~Gripper();
 };
 
 

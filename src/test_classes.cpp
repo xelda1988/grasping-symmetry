@@ -16,9 +16,17 @@ int main () {
   //Do Something
   
   
+  //Test gripper.cpp 
+  
+  Gripper gripperInstance("/home/alexander/workspace/GraspSymmetrizer/resources/SchunkDexHandConfig.xml");
+  gripperInstance.printGripperInfo();
   
   
-  //Test object.cpp
+  
+  /*
+  
+  ////////////////////
+  //Test object.cpp done
   
   XMLDocument doc;
   doc.LoadFile("../resources/ObjectDatabase.xml");
@@ -33,14 +41,6 @@ int main () {
   
   objectDb.printObjectDatabase();
   
-  
-  
-  
-  
-  
-  
-  
-  /*
   //Test util done:
   
   /////////////

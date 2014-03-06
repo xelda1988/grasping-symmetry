@@ -1,6 +1,7 @@
 #include "GraspSymmetrizer/util.h"
 #include <boost/lexical_cast.hpp>
 #include <sstream>
+#include <limits>
 
 //Basic Type Conversions  
 int charArrayToInt(const char* charPtr){
@@ -133,13 +134,22 @@ void poseQuatToPoseEuler(PoseEuler & poseEuler, const PoseQuat & poseQuat){
 }
 //   
 //   //getAttributesFrom XML Element
+//For floats also nan is defined
 void getAttributeList(  std::vector<float> & floatList, const std::vector<std::string> & attributeNames,  const tinyxml2::XMLElement* xmlElementPtr){
   try
   { 
+    float nan  = std::numeric_limits<float>::quiet_NaN();
+    
     for(int i = 0; i < attributeNames.size(); i++)
     {
-      float actualFloat = xmlElementPtr->FloatAttribute( attributeNames.at(i).c_str() );
-      floatList.push_back( actualFloat );
+      
+      const char* actualCharArray = xmlElementPtr->Attribute( attributeNames.at(i).c_str() );
+      std::string actualString = CharArrayToString(actualCharArray);
+      if (actualString == "NaN") floatList.push_back( nan );
+      else {
+	float actualFloat = xmlElementPtr->FloatAttribute( attributeNames.at(i).c_str() );
+	floatList.push_back( actualFloat );
+      }      
     }
   }
   catch(std::exception &e)
@@ -165,6 +175,7 @@ void getAttributeList(  std::vector<int> & intList, const std::vector<std::strin
     exit(EXIT_FAILURE);
   }
 }
+
 void getAttributeList(  std::vector<std::string> & stringList, const std::vector<std::string> & attributeNames, const tinyxml2::XMLElement* xmlElementPtr){
   try
   {
@@ -191,6 +202,16 @@ void getSymmetryTypeFromString(SymmetryType & symmetryType, const std::string sy
   else if (symmetryTypeStr == "c3") symmetryType=C3;
   else 
   {std::cout << "Objectsymmetry not correctly defined, exiting!\n";
+    exit(EXIT_FAILURE);
+  }
+}
+
+void getConstraintTypeFromString(ConstraintType & constraintType, const std::string constrainTypeStr){
+ 
+  if(constrainTypeStr == "bool") constraintType=BOOL;
+  else if (constrainTypeStr == "continuous") constraintType=CONTINUOUS;
+  else 
+  {std::cout << "Constraint Symmetry not correctly defined, exiting!\n";
     exit(EXIT_FAILURE);
   }
 }

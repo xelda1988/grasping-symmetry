@@ -105,12 +105,52 @@ struct TriplePlane {
 //For Gripper
 struct Constraint {
   ConstraintType constraintType;
-  std::vector<Eigen::MatrixXf> jointConfigurations;
+  boost::variant< std::vector<Eigen::VectorXf>, std::vector<Eigen::VectorXi> > jointConfigurations;
+  void print(){
+   std::cout << "Constraint:\n"; 
+   std::cout << "Constraint Type: " << constraintType << std::endl;
+   std::vector<Eigen::VectorXf> jointsFloat;
+   std::vector<Eigen::VectorXi> jointsInt;
+   switch (constraintType)
+    {
+    case BOOL: 
+    {
+      jointsInt = boost::get<std::vector<Eigen::VectorXi> > (jointConfigurations);
+      for(int i = 0; i < jointsInt.size(); i++){
+	std::cout << "Joint Configuration " << i << ":" << jointsInt.at(i).transpose() << "\n";
+      }
+    }
+    break;
+    case CONTINUOUS:
+    {
+      jointsFloat = boost::get<std::vector<Eigen::VectorXf> > (jointConfigurations);
+      for(int i = 0; i < jointsFloat.size(); i++){
+	std::cout << "Joint Configuration " << i << ":" << jointsFloat.at(i).transpose() << "\n";
+      }
+    }
+    break;
+    default: 
+      std::cout << "Constraintsymmetry not correctly defined, exiting!\n";
+      exit(EXIT_FAILURE);
+      break;
+    }  
+  }
 }; //Here only type definition
 
 struct GripperSymmetry {
-  SymmetryType symmetryType;
+  
+  SymmetryType symmetryType;  
   std::vector<Constraint> symmmetryData;
+  
+  void print() {
+    std::cout << "Symmetry Info:" << std::endl;
+    std::cout << "Symmetry Type: " << symmetryType << std::endl;
+    for (int i =0; i < symmmetryData.size(); i++) 
+    {
+      std::cout << "Symmetry Data at: " << i << "\n";
+      symmmetryData.at(i).print();
+    }
+  }
 };
 
 //For non-Object, only 
