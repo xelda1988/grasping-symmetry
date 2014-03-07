@@ -163,7 +163,7 @@ void Gripper::loadFromXml(std::string filePath){
   }
 }
 
- void Gripper::printGripperInfo(){
+void Gripper::printGripperInfo(){
    
    std::cout << "\nGripper Info: \n"; 
    std::cout << "Gripper Identifier: " << gripperIdentifier_ << std::endl;
@@ -175,10 +175,15 @@ void Gripper::loadFromXml(std::string filePath){
      std::cout << "Gripper Symmetry at " << i << std::endl;
      gripperSymmetry_.at(i).print();
    }
- }
+}
 
+std::string Gripper::getName() const{
+  return gripperIdentifier_;
+}
 
-
+int Gripper::getDof() const{
+  return dof_;
+}
 
 
 

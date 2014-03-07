@@ -192,6 +192,21 @@ void getAttributeList(  std::vector<std::string> & stringList, const std::vector
   }
 }
 
+void setAttributeList(  const std::vector<std::string> & stringList, const std::vector<std::string> & attributeNameList, tinyxml2::XMLElement* xmlElementPtr){
+  
+  if ((stringList.size()) == (attributeNameList.size()) && xmlElementPtr){
+    for(int i = 0; i  < stringList.size(); i ++) {
+      xmlElementPtr->SetAttribute(attributeNameList.at(i).c_str(), stringList.at(i).c_str());
+    }
+  }
+  else 
+  {
+    std::cout << "[Error: setAttributeList] not equal values of attribute name and size or Ptr to XML Element is NULL" << std::endl;
+  }
+  
+}
+ 
+
 void getSymmetryTypeFromString(SymmetryType & symmetryType, const std::string symmetryTypeStr){
  
   if(symmetryTypeStr == "singleplane") symmetryType=SINGLEPLANE;
@@ -216,4 +231,59 @@ void getConstraintTypeFromString(ConstraintType & constraintType, const std::str
   }
 }
 
+std::string MatToString(const Eigen::MatrixXf& mat)
+{ 
+	std::ostringstream ss;
+	const float *p = mat.data();
+	for(; p < mat.data() + mat.size(); p++) {
+	  ss << *p << " ";
+	}
+	return ss.str();
+}
 
+//HERE IF ONE OF THE VALUES IS -negative YOU CAN USE COL OR ROW INFO ONLY
+Eigen::MatrixXf StringToMat(const std::string &strg, int row, int col)
+{
+	std::vector<float> v;
+	Eigen::MatrixXf A;
+	// Build an istream that holds the input string
+	std::istringstream iss(strg);
+
+	// Iterate over the istream, using >> to grab floats
+	// and push_back to store them in the vector
+	std::copy(std::istream_iterator<float>(iss),
+	      std::istream_iterator<float>(),
+	      std::back_inserter(v));
+	
+	if (row || col < 1) {
+	  std::cout << "try to map number of cols or rows by logic" << std::endl;
+	  if (row < 1) {
+	    row = v.size()/col;
+	    return Eigen::Map<Eigen::MatrixXf>(v.data(),row,col); 
+	  }
+	  else 
+	  {
+	    col = v.size()/row;
+	    return Eigen::Map<Eigen::MatrixXf>(v.data(),row,col);
+	  }
+	}
+	else 
+	{
+	  if (row*col != v.size()) {
+	    std::cout << "col*row is not of the size of this string - exiting program" << std::endl;
+	    exit( EXIT_FAILURE );
+	  }
+	  else
+	    return Eigen::Map<Eigen::MatrixXf>(v.data(),row,col);
+	}
+}
+
+std::vector<std::string> VecToStdVecString(const Eigen::VectorXf& vec){
+  
+  std::vector<std::string> vecStr;
+  for (int i = 0; i < vec.size(); i++)
+  {
+    vecStr.push_back(floatToString(vec(i)));
+  }
+  return vecStr;
+}

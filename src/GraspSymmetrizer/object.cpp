@@ -287,6 +287,7 @@ void ObjectDatabase::loadFromXml(const std::string filePath){
   else {
   
     std::cout << "Document Parsing Error: " << filePath << "exiting" << std::endl;
+    exit(EXIT_FAILURE);
   }
 }
 

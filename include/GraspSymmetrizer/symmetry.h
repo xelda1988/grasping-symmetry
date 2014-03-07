@@ -29,7 +29,9 @@ public:
   void computeSymmetries();
   void getGraspDb(GraspDatabase & graspDb);
   
-  SymmetryOperation(const Gripper & gripper, const Object & object, const Grasp & grasp){
+  SymmetryOperation(const Gripper & gripper, const Object & object, const Grasp & grasp)
+  : inputGrasp_(grasp)
+  {
     //set variables ...
   }
   ~SymmetryOperation();

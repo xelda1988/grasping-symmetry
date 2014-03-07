@@ -23,7 +23,9 @@ class Gripper {
 public:
   
   void loadFromXml(std::string filePath); //Pointer to Element of XMLfile
-  void printGripperInfo();  
+  void printGripperInfo();
+  std::string getName() const;
+  int getDof() const;
   //Constructors
   Gripper(std::string filePath) {
     loadFromXml(filePath);

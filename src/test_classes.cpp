@@ -15,15 +15,25 @@ int main () {
  
   //Do Something
   
+  //Test grasp.cpp 
   
-  //Test gripper.cpp 
+  XMLDocument doc;
+  doc.LoadFile("/home/alexander/workspace/GraspSymmetrizer/resources/GraspDatabase_base_layout.xml");
+  
+  XMLElement * graspPtr = doc.FirstChildElement()->FirstChildElement("grasp");
+  Grasp grasp(graspPtr);
+  grasp.printGrasp();
+  
+  cout << "Testing grapIt loader: " << endl;
+  
+  Grasp grasp2("/home/alexander/workspace/GraspSymmetrizer/resources/GraspDatabase_GraspIt_import.xml");
+  grasp2.printGrasp();
+  
+  /*
+  //Test gripper.cpp done
   
   Gripper gripperInstance("/home/alexander/workspace/GraspSymmetrizer/resources/SchunkDexHandConfig.xml");
   gripperInstance.printGripperInfo();
-  
-  
-  
-  /*
   
   ////////////////////
   //Test object.cpp done

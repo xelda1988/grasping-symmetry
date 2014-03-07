@@ -17,8 +17,8 @@ public:
   std::string gripperIdentifier_; //name of gripper
   std::string objectIdentifier_;
   int dof_; //Degree of freedom  
-  std::vector<PoseMat> handPose_; //Pose of handframe
-  std::vector<Eigen::MatrixXf> jointPositions_;//Joint Positions (Length not known at compiletime)
+  std::vector<PoseMat> handPoses_; //Pose of handframe
+  std::vector<Eigen::VectorXf> jointPositions_;//Joint Positions (Length not known at compiletime)
   
   
   void loadFromGraspItXml(const std::string filePath); //Pointer to Element of XMLfile
@@ -28,21 +28,29 @@ public:
   void loadFromXml(tinyxml2::XMLElement* graspElement);
   void addToXml(tinyxml2::XMLElement* graspElement);
   
-  void printGrasp();
+  void extrapolateGraspSeq(); //extrapolates grasp Sequence linearly and or along approach direction
+  
+  void printGrasp() const;
   
   //Constructors
-  Grasp(tinyxml2::XMLElement* graspElement,const Gripper &  gripper) {
-    setGripper(gripper); //to check DOF!
+//   Grasp(tinyxml2::XMLElement* graspElement,const Gripper &  gripper) {
+//     setGripper(gripper); //to check DOF!
+//     loadFromXml(graspElement);
+//   }
+  
+  Grasp(tinyxml2::XMLElement* graspElement)
+  : dof_(7) //for now hardcoded
+  {
     loadFromXml(graspElement);
   }
   
-  Grasp(const std::string filePath, const Gripper & gripper) {
-    setGripper(gripper); //to check DOF!
+  Grasp(const std::string filePath) {
     loadFromGraspItXml(filePath);
   }
-  Grasp();
+  
+  //Grasp();
   //destructor
-  ~Grasp();
+  //~Grasp();
 };
 
 class GraspDatabase {
