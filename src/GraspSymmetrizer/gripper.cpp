@@ -88,12 +88,12 @@ void Gripper::loadFromXml(std::string filePath){
     //Eigen::VectorXi actualJointConfigurationInt;
     //Eigen::VectorXf actualJointConfigurationFloat;   
     std::vector<Eigen::VectorXi> actualJointConfigurationsInt;
-    std::vector<Eigen::VectorXi> actualJointConfigurationsFloat;
+    std::vector<Eigen::VectorXf> actualJointConfigurationsFloat;
     //template<typename T>
     //std::vector<T> actualJointConfigurations;
-int nrOutLoop=0;
+// int nrOutLoop=0;
     
-    for (;xeSymmetry; xeSymmetry = xeSymmetry->NextSiblingElement())
+    for (;xeSymmetry; xeSymmetry = xeSymmetry->NextSiblingElement("symmetry"))
     {
       
       xeConstraint = xeSymmetry->FirstChildElement("constraint");
@@ -103,14 +103,19 @@ int nrOutLoop=0;
       getAttributeList(valuesSymmetry, attributesSymmetry, xeSymmetry);
       getSymmetryTypeFromString(actualSymmetryType, valuesSymmetry.at(0));
       actualGripperSymmetry.symmetryType = actualSymmetryType; //Assigning Gripper Symmetry
-      
-      //get Constraint Type
-      getAttributeList(valuesConstraint, attributesConstraint, xeConstraint);
-      getConstraintTypeFromString(actualConstraintType, valuesConstraint.at(0));
-      actualConstraint.constraintType = actualConstraintType;
+      valuesSymmetry.resize(0);
+// std::cout << "[Debug:] Actual symmetry type: " <<  actualSymmetryType << std::endl;
       
       //Middle Loop Constraints
       for(;xeConstraint; xeConstraint = xeConstraint->NextSiblingElement("constraint")) {
+	
+	//get Constraint Type
+      getAttributeList(valuesConstraint, attributesConstraint, xeConstraint);
+// std::cout << "[Debug:] 114" << std::endl;
+      getConstraintTypeFromString(actualConstraintType, valuesConstraint.at(0));
+      actualConstraint.constraintType = actualConstraintType;
+      valuesConstraint.resize(0);
+// std::cout << "[Debug:] Actual constraint type: " <<  actualConstraintType << std::endl;
 	
 	xeJointConfigurationConstraint = xeConstraint->FirstChildElement("joint_configuration");
 	//InnerLoop Joint Configurations
@@ -122,14 +127,18 @@ int nrOutLoop=0;
 	    actualJointConfigurationsInt.push_back(actualJointConfigurationInt);
 	  }
 	  else if (actualConstraint.constraintType == CONTINUOUS){
+// std::cout << "[Debug:] 130: in innerloop continous condition " <<  actualConstraintType << std::endl;
 	    getAttributeList(valuesJointConfigurationFloat, attributesJointConfiguration, xeJointConfigurationConstraint);
-	    Eigen::Map<Eigen::MatrixXi> actualJointConfigurationFloat(valuesJointConfigurationInt.data(), 7, 1);
+	    Eigen::Map<Eigen::MatrixXf> actualJointConfigurationFloat(valuesJointConfigurationFloat.data(), 7, 1);
 	    actualJointConfigurationsFloat.push_back(actualJointConfigurationFloat);
 	  }
 	  else { 
 	    std::cout << "actual Constraint Type not correctly defined - exit" << std::endl;
 	    exit(EXIT_FAILURE);
 	  }
+	  //deleting values
+	  valuesJointConfigurationInt.resize(0);
+	  valuesJointConfigurationFloat.resize(0);
 	}	
 	//Assigning Constraint and deleting the vectors
 	if (actualConstraint.constraintType == BOOL ) actualConstraint.jointConfigurations = actualJointConfigurationsInt;
@@ -140,12 +149,13 @@ int nrOutLoop=0;
 
       //Assigning actual constraint and deleting actualConstraint
       actualGripperSymmetry.symmmetryData.push_back(actualConstraint);
+      gripperSymmetry_.push_back( actualGripperSymmetry );
+// nrOutLoop++;
+// std::cout << "[Debug:] Nr outer loop " << nrOutLoop <<  std::endl;
     }
     
-    //Assigning actual GripperSymmetry //TODO put into loop
-    gripperSymmetry_.push_back( actualGripperSymmetry );
-nrOutLoop++;
-std::cout << "[Debug] Nr outer loop " << nrOutLoop <<  std::endl;
+    //Assigning actual GripperSymmetry //
+    
   }
   else {
   
