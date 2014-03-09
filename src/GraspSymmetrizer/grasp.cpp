@@ -186,7 +186,7 @@ std::cout << "[Debug:] GraspPose: \n" << graspPose << std::endl;
   }
 }
 
-void Grasp::addToXml(tinyxml2::XMLElement* graspElement){
+void Grasp::addToXml(std::string filePath){
   
   //write to .xml directly  
   tinyxml2::XMLDocument doc;
@@ -211,16 +211,40 @@ void Grasp::addToXml(tinyxml2::XMLElement* graspElement){
   elementNames.push_back("joint_configuration");
   elementNames.push_back("pose_configuration");
   
-  //Go from here TODO
+  //Create and Insert XML Elements 
+  
+  tinyxml2::XMLElement* graspPtrList[5];
+  std::vector<tinyxml2::XMLElement*> jointSeqPtrList;
+  std::vector<tinyxml2::XMLElement*> poseSeqPtrList;
+  
+  for(int i = 0; i < 5; i++){  
+    graspPtrList[i] = doc.NewElement(elementNames.at(i).c_str());
+  }
+  
+   for (int i = 0; i < jointPositions_.size(); i ++){
+    jointSeqPtrList.push_back(doc.NewElement(elementNames.at(3).c_str()));
+    graspPtrList[1]->InsertEndChild(jointSeqPtrList.at(i));
+   }
+   
+   for (int i = 0; i < handPoses_.size(); i ++){
+    poseSeqPtrList.push_back(doc.NewElement(elementNames.at(4).c_str()));
+   graspPtrList[2]->InsertEndChild(poseSeqPtrList.at(i));
+   }
+  
+  graspDbPtr->InsertEndChild(graspPtrList[0]); 
+  graspPtrList[0]->InsertEndChild(graspPtrList[1]);
+  graspPtrList[0]->InsertEndChild(graspPtrList[2]);
   
   
- std::vector<std::string> attributesGrasp,  
-			   attributesJointConfiguration, 
-			   attributesPoseConfiguration,
-			   valuesGrasp;
-			   
- std::vector< std::vector<std::string> >  valuesJointConfiguration,	     
-			   valuesPoseConfiguration;
+  
+
+  std::vector<std::string> attributesGrasp,  
+			    attributesJointConfiguration, 
+			    attributesPoseConfiguration,
+			    valuesGrasp;
+			    
+  std::vector< std::vector<std::string> >  valuesJointConfiguration,	     
+			    valuesPoseConfiguration;
 			   
   attributesGrasp.push_back("object_identifier");
   attributesGrasp.push_back("gripper_identifier");
@@ -250,10 +274,11 @@ void Grasp::addToXml(tinyxml2::XMLElement* graspElement){
   for(int i=0; i < handPoses_.size(); i++)
   {
     poseMatToPoseEuler(actualEulerPose,handPoses_.at(i));
-    valuesJointConfiguration.push_back( VecToStdVecString(actualEulerPose) );
+    valuesPoseConfiguration.push_back( VecToStdVecString(actualEulerPose) );
   }
     
     //check pointer
+    tinyxml2::XMLElement* graspElement = graspPtrList[0];
   if (graspElement) {
     
     //set Grasp attributes
@@ -281,6 +306,38 @@ void Grasp::addToXml(tinyxml2::XMLElement* graspElement){
       setAttributeList(valuesPoseConfiguration.at(iterPose), attributesPoseConfiguration, poseConfigPtr);
       iterPose++;
     }
+    
+    doc.SaveFile(filePath.c_str());
+  }
+  else 
+  {
+    std::cout << "Error: grasp XMLPtr is NULL, exiting\n";
+    exit(EXIT_FAILURE);
+  }
+
+}
+   
+void GraspDatabase::loadFromXml(const std::string filePath){
+ 
+  tinyxml2::XMLDocument doc;
+  doc.LoadFile(filePath.c_str());
+  
+  if (!doc.Error()) {
+    std::cout << "Document successfully loaded: " << filePath << std::endl;
+  }
+  else {
+    std::cout << "Document Parsing Error: " << filePath << " exiting" << std::endl;
+    exit(EXIT_FAILURE);
+  }
+  
+  tinyxml2::XMLElement * graspPtr = doc.FirstChildElement()->FirstChildElement("grasp");
+  
+  if (graspPtr) {
+    for(;graspPtr ; graspPtr=graspPtr->NextSiblingElement("grasp"))
+    {
+      Grasp grasp(graspPtr);
+      graspDb_.push_back(grasp);
+    }
   }
   else 
   {
@@ -289,7 +346,28 @@ void Grasp::addToXml(tinyxml2::XMLElement* graspElement){
   }
   
 }
-   
+
+void GraspDatabase::printGraspDatabase(){
+ 
+  std::cout << "Grasp Database: " << std::endl;
+  for(int i = 0; i < graspDb_.size(); i++)
+  {
+    graspDb_.at(i).printGrasp();
+  }
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 //TODO: maybe add extrapolator function for a single grasp Sequence along approach direction
 

@@ -26,7 +26,7 @@ public:
   void setGripper(const Gripper & gripper); //sets Dof and gripper Identifier
   
   void loadFromXml(tinyxml2::XMLElement* graspElement);
-  void addToXml(tinyxml2::XMLElement* graspElement);
+  void addToXml(std::string filePath);
   
   void extrapolateGraspSeq(); //extrapolates grasp Sequence linearly and or along approach direction
   
@@ -59,14 +59,14 @@ class GraspDatabase {
   
 public:
   
-  void loadFromXml(const std::string filePath, const Gripper & gripper);
+  void loadFromXml(const std::string filePath);
   void printGraspDatabase();
   
-  GraspDatabase(const std::string filePath, const Gripper & gripper) {
-    loadFromXml(filePath, gripper); //Pass gripper through constructor
+  GraspDatabase(const std::string filePath) {
+    loadFromXml(filePath); //Pass gripper through constructor
   }
   
-  ~GraspDatabase();
+  //~GraspDatabase();
 };
 
 #endif

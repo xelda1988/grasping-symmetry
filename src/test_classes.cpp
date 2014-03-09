@@ -15,6 +15,10 @@ int main () {
  
   //Do Something
   
+
+  
+  /*
+  
   //Test grasp.cpp 
   
   XMLDocument doc;
@@ -29,7 +33,11 @@ int main () {
   Grasp grasp2("/home/alexander/workspace/GraspSymmetrizer/resources/GraspDatabase_GraspIt_import.xml");
   grasp2.printGrasp();
   
-  /*
+  //grasp.addToXml("/home/alexander/workspace/GraspSymmetrizer/resources/GraspDatabase_base_layout_write.xml");
+  
+  
+  GraspDatabase graspDb("/home/alexander/workspace/GraspSymmetrizer/resources/GraspDatabase_base_layout_write.xml");
+  graspDb.printGraspDatabase();
   //Test gripper.cpp done
   
   Gripper gripperInstance("/home/alexander/workspace/GraspSymmetrizer/resources/SchunkDexHandConfig.xml");
