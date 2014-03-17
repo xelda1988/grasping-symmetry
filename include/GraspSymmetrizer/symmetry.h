@@ -21,16 +21,18 @@ class SymmetryOperation {
   
   std::vector<Grasp> resultingGrasps_;
   Grasp inputGrasp_;
+  std::vector<int> jointAndPoseAssociation_;
   
   void reflectGrasps(const Layer3D layer); //does Operation on resultingGrasps
   void rotateGrasps(const Axis3D axis);
 public:
   
+  void getActiveGripperSymmetryAndStateAssociation(); //for Current Grasp
   void computeSymmetries();
   void getGraspDb(GraspDatabase & graspDb);
   
   SymmetryOperation(const Gripper & gripper, const Object & object, const Grasp & grasp)
-  : inputGrasp_(grasp)
+  : inputGrasp_(grasp),rotationSamplingNr_(10)
   {
     //set variables ...
   }

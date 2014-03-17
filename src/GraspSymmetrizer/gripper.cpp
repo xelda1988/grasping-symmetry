@@ -9,13 +9,16 @@ void Gripper::loadFromXml(std::string filePath){
 			   attributesSymmetry,
 			   attributesConstraint,
 			   attributesJointConfiguration,
+			   attributesPoint,
 			   valuesManipulator,
 			   valuesSymmetry,
 			   valuesConstraint,
 			   valuesJointConfigurationString; //map this to Int
 			   
   std::vector<float> valuesGlobalPose, 
-		     valuesJointConfigurationFloat;
+		     valuesJointConfigurationFloat,
+		     valuesPoint;
+		     
   std::vector<int> valuesJointConfigurationInt;
 		    
   attributesManipulator.push_back("name");	
@@ -27,6 +30,10 @@ void Gripper::loadFromXml(std::string filePath){
   attributesGlobalPose.push_back("roll");
   attributesGlobalPose.push_back("pitch");
   attributesGlobalPose.push_back("yaw");
+  
+  attributesPoint.push_back("x");
+  attributesPoint.push_back("y");
+  attributesPoint.push_back("z");
   
   attributesSymmetry.push_back("type");
   attributesConstraint.push_back("type");
@@ -78,6 +85,9 @@ void Gripper::loadFromXml(std::string filePath){
     //Outer Loop
     tinyxml2::XMLElement * xeSymmetry = xeManip->FirstChildElement("symmetry");
     tinyxml2::XMLElement * xeConstraint = NULL;
+    tinyxml2::XMLElement * xeSymmetryData = NULL;
+    tinyxml2::XMLElement * layerOrAxisPtr = NULL;
+    tinyxml2::XMLElement * pointPtr = NULL;    
     tinyxml2::XMLElement * xeJointConfigurationConstraint = NULL;
     
     GripperSymmetry actualGripperSymmetry;
@@ -97,6 +107,7 @@ void Gripper::loadFromXml(std::string filePath){
     {
       
       xeConstraint = xeSymmetry->FirstChildElement("constraint");
+      xeSymmetryData = xeSymmetry->FirstChildElement("symmetryData");
       
       
       //get Symmetry Type
@@ -147,8 +158,118 @@ void Gripper::loadFromXml(std::string filePath){
 	actualJointConfigurationsInt.resize(0);	
       }
 
+      //Middle Loop for Symmetry Data
+      layerOrAxisPtr=xeSymmetryData->FirstChildElement();
+      switch (actualGripperSymmetry.symmetryType)
+	{
+	  case SINGLEPLANE:
+	  {
+std::cout << "[DEBUG] 167 inside case SinglePlane" << std::endl;
+	    SinglePlane singlePlane; //actual single plane in the loop;
+	    int n =0;
+	    int m = 0;
+	    //Outer Loop
+	    for (; layerOrAxisPtr; layerOrAxisPtr=layerOrAxisPtr->NextSiblingElement() )
+	    {
+	      pointPtr = layerOrAxisPtr->FirstChildElement("point");
+
+	      m=0;
+	      //Inner Loop - getting the full layer or axis
+	      for(; pointPtr; pointPtr=pointPtr->NextSiblingElement() ){
+		getAttributeList(valuesPoint, attributesPoint, pointPtr);
+
+		if     (m==0) singlePlane.plane1.point1 << valuesPoint.at(0), valuesPoint.at(1), valuesPoint.at(2);
+		else if(m==1) singlePlane.plane1.point2 << valuesPoint.at(0), valuesPoint.at(1), valuesPoint.at(2);
+		else if(m==2) singlePlane.plane1.point3 << valuesPoint.at(0), valuesPoint.at(1), valuesPoint.at(2);
+		
+		m++;
+		valuesPoint.resize(0); //erasing content
+	      }
+	      //In Outer Loop 
+	      n++;
+	    }
+std::cout << "[DEBUG] 191 Printing actual singlePlane" << std::endl;
+singlePlane.print();
+	    actualGripperSymmetry.symmetryData = singlePlane;
+	  }
+	  break;
+	  case C3:
+	  {
+	    Crot3 cRot3Data; //actual single plane in the loop;
+	
+	    int n =0;
+	    int m = 0;
+	    //Outer Loop for axis
+	    layerOrAxisPtr = xeSymmetryData->FirstChildElement("axis");
+	    for (; layerOrAxisPtr; layerOrAxisPtr=layerOrAxisPtr->NextSiblingElement("axis") )
+	    {
+	      pointPtr = layerOrAxisPtr->FirstChildElement("point");
+	      
+	      m=0;
+	      //Inner Loop - getting the full layer or axis
+	      for(; pointPtr; pointPtr=pointPtr->NextSiblingElement("point") ){
+		getAttributeList(valuesPoint, attributesPoint, pointPtr);
+		
+		if     (m==0) cRot3Data.axis1.point1 << valuesPoint.at(0), valuesPoint.at(1), valuesPoint.at(2);
+		else if(m==1) cRot3Data.axis1.point2 << valuesPoint.at(0), valuesPoint.at(1), valuesPoint.at(2);
+		
+		m++;
+		valuesPoint.resize(0); //erasing content
+	      }
+	      //In Outer Loop 
+	      n++;
+	    }
+	    
+	    //Outer Loop for layer
+	    n=0;
+	    m=0;
+	    layerOrAxisPtr = xeSymmetryData->FirstChildElement("layer");
+	    for (; layerOrAxisPtr; layerOrAxisPtr=layerOrAxisPtr->NextSiblingElement("layer") )
+	    {
+	      pointPtr = layerOrAxisPtr->FirstChildElement("point");
+	
+	      m=0;
+	      //Inner Loop - getting the full layer or axis
+	      for(; pointPtr; pointPtr=pointPtr->NextSiblingElement("point") ){
+		getAttributeList(valuesPoint, attributesPoint, pointPtr);
+		if (n==0)
+		{	    
+		  if     (m==0) cRot3Data.plane1.point1 << valuesPoint.at(0), valuesPoint.at(1), valuesPoint.at(2);
+		  else if(m==1) cRot3Data.plane1.point2 << valuesPoint.at(0), valuesPoint.at(1), valuesPoint.at(2);
+		  else if(m==2) cRot3Data.plane1.point3 << valuesPoint.at(0), valuesPoint.at(1), valuesPoint.at(2);
+		}
+		else if (n==1){
+		  if     (m==0) cRot3Data.plane2.point1 << valuesPoint.at(0), valuesPoint.at(1), valuesPoint.at(2);
+		  else if(m==1) cRot3Data.plane2.point2 << valuesPoint.at(0), valuesPoint.at(1), valuesPoint.at(2);
+		  else if(m==2) cRot3Data.plane2.point3 << valuesPoint.at(0), valuesPoint.at(1), valuesPoint.at(2);	    
+		}
+		else if (n==2)
+		{
+		  if     (m==0) cRot3Data.plane3.point1 << valuesPoint.at(0), valuesPoint.at(1), valuesPoint.at(2);
+		  else if(m==1) cRot3Data.plane3.point2 << valuesPoint.at(0), valuesPoint.at(1), valuesPoint.at(2);
+		  else if(m==2) cRot3Data.plane3.point3 << valuesPoint.at(0), valuesPoint.at(1), valuesPoint.at(2);	    
+		}
+		
+		m++;
+		valuesPoint.resize(0); //erasing content
+	      }
+	      //In Outer Loop 
+	      n++;
+	    }
+std::cout << "[DEBUG] 259: Printing actual c3RotData" << std::endl;
+cRot3Data.print();
+	    actualGripperSymmetry.symmetryData = cRot3Data;
+	  }
+	  break;
+	  default: 
+	  std::cout << "[Error] Objectsymmetry not correctly defined on XML, exiting!\n";
+	  exit(EXIT_FAILURE);
+	  break;
+	}  
+      
+      
       //Assigning actual constraint and deleting actualConstraint
-      actualGripperSymmetry.symmmetryData.push_back(actualConstraint);
+      actualGripperSymmetry.symmetryConstraint.push_back(actualConstraint);
       gripperSymmetry_.push_back( actualGripperSymmetry );
 // nrOutLoop++;
 // std::cout << "[Debug:] Nr outer loop " << nrOutLoop <<  std::endl;

@@ -24,9 +24,13 @@ void axisRotationMatrix(Eigen::Matrix4f & axisMat, const Axis3D axis, const floa
 	//create normalvector for w
 	Point3D viewUp;
 	viewUp << 0,1,0;
+	
+std::cout << "[Debug:] 28" << fabs(viewUp.transpose()*w) - 1.0f << std::endl;
 
-	if ( (fabs(viewUp.transpose()*w) - 1.0f < 0.001f)) //if they are parallel, thats bad
+
+	if ( (fabs(viewUp.cross(w).norm()) < 0.001f)) //if they are parallel, thats bad
 	{
+std::cout << "[Debug:] 32, in if condition" << std::endl;
 	  viewUp << 0,0,1;
 	}
 	

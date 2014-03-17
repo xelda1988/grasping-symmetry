@@ -18,10 +18,11 @@ class Gripper {
   PoseMat globalPose_; //Global Pose offset of handframe, maybe needed later
   Eigen::VectorXf jointPositions_; //Current Gripper Joint Position
   
-  std::vector<GripperSymmetry> gripperSymmetry_; //also data definition
+  
   
 public:
   
+  std::vector<GripperSymmetry> gripperSymmetry_; //also data definition
   void loadFromXml(std::string filePath); //Pointer to Element of XMLfile
   void printGripperInfo();
   std::string getName() const;

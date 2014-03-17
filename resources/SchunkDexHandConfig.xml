@@ -6,11 +6,18 @@
     <joint_configuration j1="0" j2="0" j3="0" j4="0" j5="0" j6="0" j7="0"></joint_configuration>
     <symmetry type="singleplane">
       <!-- Symmetrystate 1: Res
-triction: J4,J5=J6,J7 -->
+triction: J4,J5=J6,J7, handframe such that 0,0,0 is in the center, along + zAxis is the front and xz-layer is reflective layer -->
       <constraint type="bool">
 	<joint_configuration j1="0" j2="0" j3="0" j4="1" j5="0" j6="1" j7="0"></joint_configuration>
 	<joint_configuration j1="0" j2="0" j3="0" j4="0" j5="1" j6="0" j7="1"></joint_configuration>
       </constraint>
+      <symmetryData>
+	<layer>
+	    <point x="0" y="0" z="0"></point>
+	    <point x="0.01905" y="0" z="0"></point>
+	    <point x="0" y="0" z="1"></point>
+	</layer>
+      </symmetryData>
     </symmetry>
     <symmetry type="c3">
       <!-- Symmetrystate 2 (C30=120deg axial): Restriction: J2,J3=J4,J5=J6,J7; J1=30deg -->
@@ -21,6 +28,27 @@ triction: J4,J5=J6,J7 -->
       <constraint type="continuous">
 	<joint_configuration j1="30" j2="NaN" j3="NaN" j4="NaN" j5="NaN" j6="NaN" j7="NaN"></joint_configuration>
       </constraint>
+      <symmetryData>
+	<axis>
+	    <point x="0" y="0" z="0"></point>
+	    <point x="0" y="0" z="1"></point>
+	</axis>
+	<layer>
+	    <point x="0" y="0" z="0"></point>
+	    <point x="0.01905" y="0" z="0"></point>
+	    <point x="0" y="0" z="1"></point>
+	</layer>
+	<layer>
+	  <point x="0" y="0" z="0"></point>
+	  <point x="-0.0095300" y="0.0165" z="0"></point>
+	  <point x="0" y="0" z="1"></point>
+	</layer>
+	<layer>
+	  <point x="0" y="0" z="0"></point>
+	  <point x="-0.0095300" y="-0.0165" z="0"></point>
+	  <point x="0" y="0" z="1"></point>
+	</layer>
+      </symmetryData>
     </symmetry>
   </manipulator>
 </robot>

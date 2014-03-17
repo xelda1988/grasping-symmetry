@@ -1,9 +1,9 @@
+#include <iostream>
 #include <Eigen/Dense>
 #include "GraspSymmetrizer/defs.h"
 #include "GraspSymmetrizer/grasp.h"
 #include "GraspSymmetrizer/gripper.h"
 #include "GraspSymmetrizer/object.h"
-#include <iostream>
 #include "GraspSymmetrizer/symmetry.h"
 #include "GraspSymmetrizer/util.h"
 
@@ -15,7 +15,43 @@ int main () {
  
   //Do Something
   
-
+  //Test symmetry.cpp
+  
+  //xy Layer
+  
+  Layer3D xyPlane;
+  xyPlane.point1 << 0,0,0;
+  xyPlane.point2 << 3,0,0;
+  xyPlane.point3 << 0,2,0;
+  
+  Axis3D zAxis;
+  zAxis.point1 << 0,0,1;
+  zAxis.point2 << 0,0,-1;
+  
+  Matrix4f reflectMatrix, axisRotMat;
+  
+  reflectionMatrix(reflectMatrix, xyPlane);
+  axisRotationMatrix(axisRotMat, zAxis, M_PI / 2.0f); //rotates in + direction
+  
+  
+  cout << "ReflectionMatrix xy plane: \n" << reflectMatrix << endl;
+  cout << "Rotation zAxis \n" << axisRotMat << endl;
+  
+  Vector4f testPoint, testPoint2;
+  
+  testPoint << 0,0,1,0;
+  testPoint2 << 1,0,0,0;
+  
+  cout << "Reflected Point \n" << reflectMatrix*testPoint << endl;
+  cout << "Rotated Point \n" << axisRotMat*testPoint2 << endl;
+  
+  //Test gripper.cpp done
+  
+  Gripper gripperInstance("/home/alexander/workspace/GraspSymmetrizer/resources/SchunkDexHandConfig.xml");
+  gripperInstance.printGripperInfo();
+  
+  
+  //z axis
   
   /*
   
@@ -38,6 +74,7 @@ int main () {
   
   GraspDatabase graspDb("/home/alexander/workspace/GraspSymmetrizer/resources/GraspDatabase_base_layout_write.xml");
   graspDb.printGraspDatabase();
+  
   //Test gripper.cpp done
   
   Gripper gripperInstance("/home/alexander/workspace/GraspSymmetrizer/resources/SchunkDexHandConfig.xml");

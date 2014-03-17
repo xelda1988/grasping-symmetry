@@ -101,6 +101,20 @@ struct TriplePlane {
   }
 };
 
+struct Crot3 {
+  Axis3D axis1;
+  Layer3D plane1;
+  Layer3D plane2;
+  Layer3D plane3;
+  void print(){
+    std::cout << "C3: \n";
+    axis1.print();
+    plane1.print();
+    plane2.print();
+    plane3.print();
+  }
+};
+
 
 //For Gripper
 struct Constraint {
@@ -140,16 +154,39 @@ struct Constraint {
 struct GripperSymmetry {
   
   SymmetryType symmetryType;  
-  std::vector<Constraint> symmmetryData;
+  std::vector<Constraint> symmetryConstraint; //To Symmetry Constraint
+  boost::variant<SinglePlane, Crot3> symmetryData;
   
   void print() {
+    SinglePlane singlePlane;
+    Crot3 c3Data;
     std::cout << "Symmetry Info:" << std::endl;
     std::cout << "Symmetry Type: " << symmetryType << std::endl;
-    for (int i =0; i < symmmetryData.size(); i++) 
+    for (int i =0; i < symmetryConstraint.size(); i++) 
     {
-      std::cout << "Symmetry Data at: " << i << "\n";
-      symmmetryData.at(i).print();
+      std::cout << "Symmetry Constraint at position : " << i << "\n";
+      symmetryConstraint.at(i).print();
     }
+    switch(symmetryType)
+    {
+      case C3:
+      {
+	c3Data = boost::get<Crot3> (symmetryData);
+	c3Data.print();
+      }
+      break;
+      case SINGLEPLANE:
+      {
+	singlePlane = boost::get<SinglePlane> (symmetryData);
+	singlePlane.print();
+      }
+      break;
+      default: 
+      std::cout << "Symmetrydata not correctly defined, exiting!\n";
+      exit(EXIT_FAILURE);
+      break;
+    }  
+      
   }
 };
 
