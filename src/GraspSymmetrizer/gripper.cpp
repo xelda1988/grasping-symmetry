@@ -164,7 +164,7 @@ void Gripper::loadFromXml(std::string filePath){
 	{
 	  case SINGLEPLANE:
 	  {
-std::cout << "[DEBUG] 167 inside case SinglePlane" << std::endl;
+// std::cout << "[DEBUG] 167 inside case SinglePlane" << std::endl;
 	    SinglePlane singlePlane; //actual single plane in the loop;
 	    int n =0;
 	    int m = 0;
@@ -188,8 +188,8 @@ std::cout << "[DEBUG] 167 inside case SinglePlane" << std::endl;
 	      //In Outer Loop 
 	      n++;
 	    }
-std::cout << "[DEBUG] 191 Printing actual singlePlane" << std::endl;
-singlePlane.print();
+// std::cout << "[DEBUG] 191 Printing actual singlePlane" << std::endl;
+// singlePlane.print();
 	    actualGripperSymmetry.symmetryData = singlePlane;
 	  }
 	  break;
@@ -256,8 +256,8 @@ singlePlane.print();
 	      //In Outer Loop 
 	      n++;
 	    }
-std::cout << "[DEBUG] 259: Printing actual c3RotData" << std::endl;
-cRot3Data.print();
+// std::cout << "[DEBUG] 259: Printing actual c3RotData" << std::endl;
+// cRot3Data.print();
 	    actualGripperSymmetry.symmetryData = cRot3Data;
 	  }
 	  break;

@@ -43,7 +43,8 @@ enum SymmetryType {
   TRIPLEPLANE,
   AXIAL,
   AXIALSINGLEPLANE,
-  C3 //Hand all 120degree rotation
+  C3, //Hand all 120degree rotation
+  NONE
 };
 
 enum ConstraintType {

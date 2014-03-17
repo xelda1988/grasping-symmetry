@@ -20,10 +20,17 @@ triction: J4,J5=J6,J7, handframe such that 0,0,0 is in the center, along + zAxis
       </symmetryData>
     </symmetry>
     <symmetry type="c3">
-      <!-- Symmetrystate 2 (C30=120deg axial): Restriction: J2,J3=J4,J5=J6,J7; J1=30deg -->
+      <!-- Symmetrystate 2 (C30=120deg axial): Restriction: J2,J3=J4,J5=J6,J7; J1=30deg, it is by order linked to the layer! -->
       <constraint type="bool">
-	<joint_configuration j1="0" j2="1" j3="0" j4="1" j5="0" j6="1" j7="0"></joint_configuration>
-	<joint_configuration j1="0" j2="0" j3="1" j4="0" j5="1" j6="0" j7="1"></joint_configuration>
+	<!-- Flip Layer 1 j4<=>j6, j5<=>j7 -->
+	<joint_configuration j1="0" j2="0" j3="0" j4="1" j5="0" j6="1" j7="0"></joint_configuration>
+	<joint_configuration j1="0" j2="0" j3="0" j4="0" j5="1" j6="0" j7="1"></joint_configuration>
+	<!-- Flip Layer 2 j2<=>j6, j3<=>j7-->
+	<joint_configuration j1="0" j2="1" j3="0" j4="0" j5="0" j6="1" j7="0"></joint_configuration>
+	<joint_configuration j1="0" j2="0" j3="1" j4="0" j5="0" j6="0" j7="1"></joint_configuration>
+	<!-- Flip Layer 3 j2<=>j4, j3<=>j5-->
+	<joint_configuration j1="0" j2="1" j3="0" j4="1" j5="0" j6="0" j7="0"></joint_configuration>
+	<joint_configuration j1="0" j2="0" j3="1" j4="0" j5="1" j6="0" j7="0"></joint_configuration>
       </constraint>
       <constraint type="continuous">
 	<joint_configuration j1="30" j2="NaN" j3="NaN" j4="NaN" j5="NaN" j6="NaN" j7="NaN"></joint_configuration>

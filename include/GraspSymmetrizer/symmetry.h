@@ -25,9 +25,11 @@ class SymmetryOperation {
   
   void reflectGrasps(const Layer3D layer); //does Operation on resultingGrasps
   void rotateGrasps(const Axis3D axis);
+  void flipJointConstraintBool(const std::vector<Eigen::VectorXi> & jointConstraints, std::vector<Eigen::VectorXf> & jointConfigurations );
+  bool checkConstraintContinuous(const std::vector<Eigen::VectorXf> & jointConstraints, const std::vector<Eigen::VectorXf> & jointConfigurations );
 public:
   
-  void getActiveGripperSymmetryAndStateAssociation(); //for Current Grasp
+  void getActiveGripperSymmetry(const Grasp & grasp, SymmetryType symType); //for Current Grasp
   void computeSymmetries();
   void getGraspDb(GraspDatabase & graspDb);
   

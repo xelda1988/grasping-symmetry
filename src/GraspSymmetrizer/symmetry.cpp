@@ -79,8 +79,81 @@ void axisRotationMatrixesN(std::vector<Eigen::Matrix4f> & axisMatrixes, const Ax
   
 }//subsequent single rotation, gives back all but identity rotation
 
+// bool SymmetryOperation::checkConstraintBool(const std::vector<Eigen::VectorXi> & jointConstraints, const std::vector<Eigen::VectorXf> & jointConfigurations ){
+//  
+//   
+//   
+// }
 
 
+
+
+bool SymmetryOperation::checkConstraintContinuous(const std::vector<Eigen::VectorXf> & jointConstraints, const std::vector<Eigen::VectorXf> & jointConfigurations ){
+ 
+  float sim_threshold= 3*M_PI/180.0; //3 deg
+  bool constraintOk = true;
+  float nan  = std::numeric_limits<float>::quiet_NaN();
+  //
+  for (int i = 0; i < jointConstraints.size(); i++)
+  {
+    
+    for (int j = 0; j < jointConfigurations.size(); j++)
+    {
+      
+      for (int k = 0; k < jointConstraints.at(i).size(); k ++)
+      {
+	if ( constraintOk && jointConstraints.at(i)(k) == nan) continue;
+	else if (constraintOk && fabs(jointConstraints.at(i)(k) - jointConfigurations.at(j)(k) ) < sim_threshold  ) continue;
+	else constraintOk = false;
+      }
+      
+    }
+    
+  }
+  return constraintOk;  
+}
+
+void SymmetryOperation::flipJointConstraintBool(const std::vector<Eigen::VectorXi> & jointConstraints, std::vector<Eigen::VectorXf> & jointConfigurations ){
+ 
+  float valueTemp;
+  int indexTemp=-1;
+  //Flip Bool Bit must be disjoint set of 2 bits set, I do not check this here
+  
+  for (int i = 0; i < jointConstraints.size(); i++)
+  {
+    
+    for (int j = 0; j < jointConfigurations.size(); j++)
+    {
+      
+      for (int k = 0; k < jointConstraints.at(i).size(); k ++)
+      {
+	if( jointConstraints.at(i)(k) == 1 && indexTemp ==-1)
+	{
+	  valueTemp = jointConfigurations.at(j)(k);
+	  indexTemp = k;
+	}
+	else if (jointConstraints.at(i)(k) == 1 && indexTemp != -1)
+	{
+	  jointConfigurations.at(j)(indexTemp) = jointConfigurations.at(j)(k);
+	  jointConfigurations.at(j)(k) = valueTemp;	  
+	}
+      }
+      
+    }
+    
+  }
+  
+}
+
+
+
+void SymmetryOperation::getActiveGripperSymmetry(const Grasp & grasp, SymmetryType symType){
+ 
+  //check for c3
+  //blub
+  
+  
+}
 
 
 
