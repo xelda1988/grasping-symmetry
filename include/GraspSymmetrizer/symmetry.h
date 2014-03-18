@@ -23,22 +23,27 @@ class SymmetryOperation {
   Grasp inputGrasp_;
   std::vector<int> jointAndPoseAssociation_;
   
-  void reflectGrasps(const Layer3D layer); //does Operation on resultingGrasps
-  void rotateGrasps(const Axis3D axis);
+  void reflectGrasps(const Layer3D & objectLayer, const Layer3D & gripperLayer, std::vector<Grasp> & grasp_list, const std::vector<Eigen::VectorXi> & jointConstraints); //does Operation on resultingGrasps
+  void rotateGrasps(const Axis3D axis, std::vector<Grasp> & grasp_list);
   void flipJointConstraintBool(const std::vector<Eigen::VectorXi> & jointConstraints, std::vector<Eigen::VectorXf> & jointConfigurations );
   bool checkConstraintContinuous(const std::vector<Eigen::VectorXf> & jointConstraints, const std::vector<Eigen::VectorXf> & jointConfigurations );
 public:
   
   void getActiveGripperSymmetry(const Grasp & grasp, SymmetryType symType); //for Current Grasp
   void computeSymmetries();
-  void getGraspDb(GraspDatabase & graspDb);
+    GraspDatabase getGraspDb(){
+    GraspDatabase graspDb(resultingGrasps_);
+    return graspDb;
+  }
   
   SymmetryOperation(const Gripper & gripper, const Object & object, const Grasp & grasp)
   : inputGrasp_(grasp),rotationSamplingNr_(10)
   {
-    //set variables ...
+    gripperSymmetry_ = gripper.gripperSymmetry_.at(0); //TODO Here one should have a function to check which symmetry applies for the current grasp!
+    objectSymmetry_ = object.getObjectSymmetry();
+    
   }
-  ~SymmetryOperation();
+//   ~SymmetryOperation();
 };
 
 #endif

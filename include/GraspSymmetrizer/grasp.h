@@ -55,15 +55,18 @@ public:
 
 class GraspDatabase {
   
-  std::vector<Grasp> graspDb_;
   
 public:
   
+  std::vector<Grasp> graspDb_;
   void loadFromXml(const std::string filePath);
   void printGraspDatabase();
   
   GraspDatabase(const std::string filePath) {
     loadFromXml(filePath); //Pass gripper through constructor
+  }
+  GraspDatabase(std::vector<Grasp> graspDb) {
+    graspDb_=graspDb;//Pass gripper through constructor
   }
   
   //~GraspDatabase();

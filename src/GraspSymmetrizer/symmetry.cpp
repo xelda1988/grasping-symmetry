@@ -145,6 +145,73 @@ void SymmetryOperation::flipJointConstraintBool(const std::vector<Eigen::VectorX
   
 }
 
+void SymmetryOperation::reflectGrasps(const Layer3D & objectLayer, const Layer3D & gripperLayer, std::vector<Grasp> & grasp_list, const std::vector<Eigen::VectorXi> & jointConstraints){
+ 
+  std::vector<Grasp> generated_grasps;
+
+  //Get reflection Matrices  
+  Eigen::Matrix4f objectReflexMatrix;
+  Eigen::Matrix4f gripperReflexMatrix;
+  
+  reflectionMatrix(objectReflexMatrix, objectLayer);
+  reflectionMatrix(gripperReflexMatrix, gripperLayer);
+    
+  //Apply rotation matrices to all hand_poses!
+  
+  for(int i = 0; i < grasp_list.size(); i++)
+  {
+    //Insert original grasps on first position of generated:
+    generated_grasps.push_back(grasp_list.at(i));
+   
+          //generate new grasp with copy-constructor
+      Grasp new_grasp(grasp_list.at(i));
+      for(int k = 0; k < new_grasp.handPoses_.size(); k++)
+      {
+	new_grasp.handPoses_.at(k) = gripperReflexMatrix*objectReflexMatrix*new_grasp.handPoses_.at(k); //to be tested, e.g determinant ...
+	flipJointConstraintBool(jointConstraints, new_grasp.jointPositions_);
+      }
+      
+      generated_grasps.push_back(new_grasp);
+      
+  } 
+ grasp_list = generated_grasps;  
+  
+  
+}
+  
+ 
+
+void SymmetryOperation::rotateGrasps(const Axis3D axis, std::vector<Grasp> & grasp_list){
+ 
+  std::vector<Grasp> generated_grasps;
+
+  //Get rotation Matrices  
+  std::vector<Eigen::Matrix4f> axisMatrixes;
+  float rotAngle = 2*M_PI/(rotationSamplingNr_+1);
+  
+  axisRotationMatrixesN(axisMatrixes, axis, rotAngle, rotationSamplingNr_);
+  
+  //Apply rotation matrices to all hand_poses!
+  
+  for(int i = 0; i < grasp_list.size(); i++)
+  {
+    //Insert original grasps on first position of generated:
+    generated_grasps.push_back(grasp_list.at(i));
+   
+    for(int j = 0; j < axisMatrixes.size(); j++)
+    {
+      //generate new grasp with copy-constructor
+      Grasp new_grasp(grasp_list.at(i));
+      for(int k = 0; k < new_grasp.handPoses_.size(); k++)
+      {
+	new_grasp.handPoses_.at(k) = axisMatrixes.at(j)*new_grasp.handPoses_.at(k);
+      }
+      
+      generated_grasps.push_back(new_grasp);
+    }    
+  } 
+ grasp_list = generated_grasps;  
+}
 
 
 void SymmetryOperation::getActiveGripperSymmetry(const Grasp & grasp, SymmetryType symType){
@@ -157,7 +224,7 @@ void SymmetryOperation::getActiveGripperSymmetry(const Grasp & grasp, SymmetryTy
 
 
 
-/*
+
 void SymmetryOperation::computeSymmetries(){
   
   //Cases depending on Object Symmetry
@@ -167,31 +234,39 @@ void SymmetryOperation::computeSymmetries(){
   {
   case SINGLEPLANE: 
     {
-      reflectGrasps( (boost::get<SinglePlane>(objectSymmetry_.symmetryData)).plane1 ); //does Operation on resultingGrasps
+      
+      Layer3D objectPlane = (boost::get<SinglePlane>(objectSymmetry_.symmetryData)).plane1;
+      Layer3D gripperPlane = (boost::get<SinglePlane>(gripperSymmetry_.symmetryData)).plane1;
+      std::vector<Eigen::VectorXi> jointCsBool = boost::get< std::vector<Eigen::VectorXi> > ( gripperSymmetry_.symmetryConstraint.at(0).jointConfigurations);
+      
+      //if first gripperPose is Symmetric all should be, now only gripper singleplane symmetry
+      //std::vector<Eigen::VectorXf> jointCsSinglePlane = resultingGrasps_.at(0).gripperSymmetry_.at(0).symmetryConstraint.at(0) //no symmetry constraint on this symmetry, only for C3  
+      
+      reflectGrasps( objectPlane, gripperPlane, resultingGrasps_, jointCsBool );
     }
     break;
   case DOUBLEPLANE: 
     {
-      reflectGrasps( (boost::get<DoublePlane>(objectSymmetry_.symmetryData)).plane1 );
-      reflectGrasps( (boost::get<DoublePlane>(objectSymmetry_.symmetryData)).plane2 );
+//       reflectGrasps( (boost::get<DoublePlane>(objectSymmetry_.symmetryData)).plane1 );
+//       reflectGrasps( (boost::get<DoublePlane>(objectSymmetry_.symmetryData)).plane2 );
     }
     break;
   case TRIPLEPLANE: 
     {
-      reflectGrasps( (boost::get<TriplePlane>(objectSymmetry_.symmetryData)).plane1);
-      reflectGrasps( (boost::get<TriplePlane>(objectSymmetry_.symmetryData)).plane2);
-      reflectGrasps( (boost::get<TriplePlane>(objectSymmetry_.symmetryData)).plane3);      
+//       reflectGrasps( (boost::get<TriplePlane>(objectSymmetry_.symmetryData)).plane1);
+//       reflectGrasps( (boost::get<TriplePlane>(objectSymmetry_.symmetryData)).plane2);
+//       reflectGrasps( (boost::get<TriplePlane>(objectSymmetry_.symmetryData)).plane3);      
     }
     break;
   case AXIAL: 
     {
-      rotateGrasps( (boost::get<Axial>(objectSymmetry_.symmetryData)).axis1);
+//       rotateGrasps( (boost::get<Axial>(objectSymmetry_.symmetryData)).axis1);
     }
     break;
   case AXIALSINGLEPLANE: 
     {
-      rotateGrasps( (boost::get<AxialSinglePlane>(objectSymmetry_.symmetryData)).axis1);
-      reflectGrasps( (boost::get<AxialSinglePlane>(objectSymmetry_.symmetryData)).plane1);
+//       rotateGrasps( (boost::get<AxialSinglePlane>(objectSymmetry_.symmetryData)).axis1);
+//       reflectGrasps( (boost::get<AxialSinglePlane>(objectSymmetry_.symmetryData)).plane1);
     }
     break;
   default: 
@@ -203,4 +278,3 @@ void SymmetryOperation::computeSymmetries(){
   std::cout << "Symmetry Successfully computed!\n";
 
 }
-*/

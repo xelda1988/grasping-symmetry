@@ -19,6 +19,9 @@ public:
   
   void loadFromXml(tinyxml2::XMLElement* objectElement); //Pointer to Element of XMLfile
   void printObjectInfo();
+  ObjectSymmetry getObjectSymmetry() const{
+    return objectSymmetry_;
+  }
   
   //Constructors
   Object(tinyxml2::XMLElement* objectElement) {
@@ -30,12 +33,14 @@ public:
 
 class ObjectDatabase {
   
-  std::vector<Object> objectDb_;
+  
   
 public:
   
+  std::vector<Object> objectDb_;
   void loadFromXml(const std::string filePath);
   void printObjectDatabase();
+
   
   ObjectDatabase (const std::string filePath){
   

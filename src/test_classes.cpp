@@ -19,40 +19,48 @@ int main () {
   
   //xy Layer
   
-  Layer3D xyPlane;
-  xyPlane.point1 << 0,0,0;
-  xyPlane.point2 << 3,0,0;
-  xyPlane.point3 << 0,2,0;
-  
-  Axis3D zAxis;
-  zAxis.point1 << 0,0,1;
-  zAxis.point2 << 0,0,-1;
-  
-  Matrix4f reflectMatrix, axisRotMat;
-  
-  reflectionMatrix(reflectMatrix, xyPlane);
-  axisRotationMatrix(axisRotMat, zAxis, M_PI / 2.0f); //rotates in + direction
-  
-  
-  cout << "ReflectionMatrix xy plane: \n" << reflectMatrix << endl;
-  cout << "Rotation zAxis \n" << axisRotMat << endl;
-  
-  Vector4f testPoint, testPoint2;
-  
-  testPoint << 0,0,1,0;
-  testPoint2 << 1,0,0,0;
-  
-  cout << "Reflected Point \n" << reflectMatrix*testPoint << endl;
-  cout << "Rotated Point \n" << axisRotMat*testPoint2 << endl;
+//   Layer3D xyPlane;
+//   xyPlane.point1 << 0,0,0;
+//   xyPlane.point2 << 3,0,0;
+//   xyPlane.point3 << 0,2,0;
+//   
+//   Axis3D zAxis;
+//   zAxis.point1 << 0,0,1;
+//   zAxis.point2 << 0,0,-1;
+//   
+//   Matrix4f reflectMatrix, axisRotMat;
+//   
+//   reflectionMatrix(reflectMatrix, xyPlane);
+//   axisRotationMatrix(axisRotMat, zAxis, M_PI / 2.0f); //rotates in + direction
+//   
+//   
+//   cout << "ReflectionMatrix xy plane: \n" << reflectMatrix << endl;
+//   cout << "Rotation zAxis \n" << axisRotMat << endl;
+//   
+//   Vector4f testPoint, testPoint2;
+//   
+//   testPoint << 0,0,1,0;
+//   testPoint2 << 1,0,0,0;
+//   
+//   cout << "Reflected Point \n" << reflectMatrix*testPoint << endl;
+//   cout << "Rotated Point \n" << axisRotMat*testPoint2 << endl;
+//
   
   //Test gripper.cpp done
   
-  Gripper gripperInstance("/home/alexander/workspace/GraspSymmetrizer/resources/SchunkDexHandConfig.xml");
-  gripperInstance.printGripperInfo();
+  Gripper gripper("/home/alexander/workspace/GraspSymmetrizer/resources/SchunkDexHandConfig.xml");
+//   gripperInstance.printGripperInfo();
   
+  GraspDatabase graspDb("/home/alexander/workspace/GraspSymmetrizer/resources/GraspDatabase_base_layout.xml");
+   graspDb.printGraspDatabase();
   
+  ObjectDatabase objectDb("../resources/ObjectDatabase.xml");
+  
+  SymmetryOperation symOp(gripper, objectDb.objectDb_.at(0),graspDb.graspDb_.at(0) );
   //z axis
-  
+  symOp.computeSymmetries();
+  GraspDatabase graspDbOut = symOp.getGraspDb();
+   graspDbOut.printGraspDatabase();
   /*
   
   //Test grasp.cpp 
