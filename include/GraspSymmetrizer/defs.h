@@ -22,6 +22,10 @@ struct Axis3D {
     std::cout << point1.transpose() << std::endl;
     std::cout << point2.transpose() << std::endl;
   }
+  void scale(float scaleFactor){
+    point1=point1*scaleFactor;
+    point2=point2*scaleFactor;
+  }
 };
 
 struct Layer3D {
@@ -33,6 +37,11 @@ struct Layer3D {
     std::cout << point1.transpose() << std::endl;
     std::cout << point2.transpose() << std::endl;
     std::cout << point3.transpose() << std::endl;
+  }
+  void scale(float scaleFactor){
+    point1=point1*scaleFactor;
+    point2=point2*scaleFactor;
+    point3=point3*scaleFactor;
   }
 };
 
@@ -58,6 +67,9 @@ struct Axial {
     std::cout << "Axial: \n";
     axis1.print();
   }
+  void scale(float scaleFactor){
+   axis1.scale(scaleFactor); 
+  }
 };
 
 struct AxialSinglePlane {
@@ -68,6 +80,10 @@ struct AxialSinglePlane {
     axis1.print();
     plane1.print();
   }
+  void scale(float scaleFactor){
+   axis1.scale(scaleFactor); 
+   plane1.scale(scaleFactor);
+  }
 };
 
 struct SinglePlane {
@@ -75,6 +91,14 @@ struct SinglePlane {
   void print(){
     std::cout << "SinglePlane: \n";
     plane1.print();
+  }
+  void scale(float scaleFactor){
+// std::cout << "[Debug] in scale" << std::endl;
+// std::cout << "Plane before scaling" << std::endl;
+   plane1.print();
+   plane1.scale(scaleFactor);
+std::cout << "Plane after scaling" << std::endl;
+   plane1.print();
   }
   
 };
@@ -88,6 +112,10 @@ struct DoublePlane {
     plane1.print();
     plane2.print();
   }
+  void scale(float scaleFactor){
+   plane1.scale(scaleFactor); 
+   plane2.scale(scaleFactor);
+  }
 };
 
 struct TriplePlane {
@@ -99,6 +127,11 @@ struct TriplePlane {
     plane1.print();
     plane2.print();
     plane3.print();
+  }
+  void scale(float scaleFactor){
+   plane1.scale(scaleFactor); 
+   plane2.scale(scaleFactor);
+   plane3.scale(scaleFactor);
   }
 };
 
@@ -113,6 +146,12 @@ struct Crot3 {
     plane1.print();
     plane2.print();
     plane3.print();
+  }
+  void scale(float scaleFactor){
+   axis1.scale(scaleFactor);
+   plane1.scale(scaleFactor); 
+   plane2.scale(scaleFactor);
+   plane3.scale(scaleFactor);
   }
 };
 

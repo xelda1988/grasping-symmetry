@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Joint1=coupled palm joint, Joint23=thumb:proximal->distal, Joint45=finger1_top_view_left_of_thumb:proximal->distal, Joint67=finger2_top_view_right_of_thumb:proximal->distal  -->
+<!-- Joint1=coupled palm joint, Joint23=thumb:proximal->distal, Joint45=finger1_top_view_left_of_thumb (thumb at bottom):proximal->distal, Joint67=finger2_top_view_right_of_thumb:proximal->distal  -->
 <robot>
   <manipulator name="Schunk Dextrous Hand" dof="7">
     <global_pose x="0.0" y="0.0" z="0.0" roll="0.0" pitch="0.0" yaw="0.0"></global_pose>

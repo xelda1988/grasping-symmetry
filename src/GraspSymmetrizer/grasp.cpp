@@ -110,6 +110,8 @@ void Grasp::loadFromGraspItXml(const std::string filePath){
     Eigen::Vector3f positionHand;
     
     Eigen::VectorXf actPose(7);
+    Eigen::VectorXf actJoints(8);
+    Eigen::VectorXf myConventionJoints(7);
     //Pointers to XML Elements
     tinyxml2::XMLElement* xeParent = doc.FirstChildElement("world");
     tinyxml2::XMLElement* xeObjectTransform = xeParent->FirstChildElement("graspableBody")->FirstChildElement("transform")->FirstChildElement("fullTransform");
@@ -158,7 +160,7 @@ std::cout << "[Debug:] Hand and Object Pose from GraspIt as a string" << poseObj
     
     actPose = StringToMat( poseHand, 1 , 7 ).transpose();
     
-    positionHand = actPose.tail(3)*0.001;
+    positionHand = actPose.tail(3)*0.001; //conversion to m
     orientationHand.w() = actPose(0);
     orientationHand.x() = actPose(1);
     orientationHand.y() = actPose(2);
@@ -176,9 +178,29 @@ std::cout << "[Debug:] HandPose\n" << handPose << std::endl;
     
     PoseMat graspPose = objectPose.inverse()*handPose;
     
+    //One should check here for a global-Pose Offset, by comparing the kinematics file
+    
 std::cout << "[Debug:] GraspPose: \n" << graspPose << std::endl;
     
-    
+  
+  //Getting hand joints:
+  actJoints =  StringToMat( jointsFinger, 1 , 8 ).transpose();
+  
+  //Add joint reordering:
+  myConventionJoints(0) = actJoints(0);
+  myConventionJoints(1) = actJoints(6);
+  myConventionJoints(2) = actJoints(7);
+  myConventionJoints(3) = actJoints(1);
+  myConventionJoints(4) = actJoints(2);
+  myConventionJoints(5) = actJoints(3);
+  myConventionJoints(6) = actJoints(4);
+
+std::cout << "[Debug:] HandJoints: \n" << myConventionJoints << std::endl;
+  
+  handPoses_.push_back(graspPose);
+  jointPositions_.push_back(myConventionJoints);
+
+  
     
   }
   else {  
@@ -344,6 +366,82 @@ void GraspDatabase::loadFromXml(const std::string filePath){
     std::cout << "Error: grasp XMLPtr is NULL, exiting\n";
     exit(EXIT_FAILURE);
   }
+  
+}
+
+
+//Should be a layout file with already the correct robot and object filepaths!
+void Grasp::saveToGraspItXml(const std::string layoutFilePath, const std::string saveFilePath){
+ 
+  //Should be a layout file with already the correct robot and object filepaths!
+  tinyxml2::XMLDocument doc;
+  doc.LoadFile(layoutFilePath.c_str());
+  
+  if (!doc.Error()) {
+    
+    //GraspMatrixes
+    PoseMat objectPose = Eigen::Matrix4f::Identity();
+    PoseQuat objectPoseQuat;
+    PoseQuat gripperPoseQuat;
+    Eigen::VectorXf actJoints(8);
+    Eigen::VectorXf myConventionJoints = jointPositions_.at(0); //Takes the 0th entry of the grasp
+    
+    std::string objectPoseStr;
+    std::string gripperPoseStr;
+    std::string handJointStr;
+    
+    poseMatToPoseQuat(objectPoseQuat, objectPose);
+    poseMatToPoseQuat(gripperPoseQuat, handPoses_.at(0));
+    
+    //Generate the strings:
+    
+    std::stringstream ss1, ss2;
+    
+    ss1 << "(" << gripperPoseQuat(3) << " " << 
+                  gripperPoseQuat(4) << " " << gripperPoseQuat(5) << " " 
+		  << gripperPoseQuat(6) << ")[";
+    ss1 << gripperPoseQuat(0)*1000 << " " << 
+                  gripperPoseQuat(1)*1000 << " " << gripperPoseQuat(2)*1000 << "]";
+		  
+    ss2 << "(" << objectPoseQuat(3) << " " << 
+                  objectPoseQuat(4) << " " << objectPoseQuat(5) << " " 
+		  << objectPoseQuat(6) << ")[";
+    ss2 << objectPoseQuat(0)*1000 << " " << 
+                  objectPoseQuat(1)*1000 << " " << objectPoseQuat(2)*1000 << "]";
+
+	gripperPoseStr = ss1.str();
+	objectPoseStr = ss2.str();
+    //Conversion to graspIt joint convention:
+    //Add joint reordering:
+    
+    actJoints(0) = myConventionJoints(0);
+    actJoints(1) = myConventionJoints(3);
+    actJoints(2) = myConventionJoints(4);
+    actJoints(3) = myConventionJoints(5);
+    actJoints(4) = myConventionJoints(6);
+    actJoints(5) = 0;
+    actJoints(6) = myConventionJoints(1);
+    actJoints(7) = myConventionJoints(2);
+    
+    handJointStr = MatToString(actJoints);
+    
+    //Pointers to XML Elements
+    tinyxml2::XMLElement* xeParent = doc.FirstChildElement("world");
+    tinyxml2::XMLElement* xeObjectTransform = xeParent->FirstChildElement("graspableBody")->FirstChildElement("transform")->FirstChildElement("fullTransform");
+    tinyxml2::XMLElement* xeHandTransform = xeParent->FirstChildElement("robot")->FirstChildElement("transform")->FirstChildElement("fullTransform");
+    tinyxml2::XMLElement* xeFingerJoints = xeParent->FirstChildElement("robot")->FirstChildElement("dofValues");
+  
+    xeObjectTransform->SetText(objectPoseStr.c_str());
+    xeHandTransform->SetText(gripperPoseStr.c_str());
+    xeFingerJoints->SetText(handJointStr.c_str());
+    
+    doc.SaveFile(saveFilePath.c_str());
+    
+  }
+  else {  
+    std::cout << "Document Parsing Error: " << layoutFilePath << "exiting" << std::endl;
+  }
+  
   
 }
 

@@ -77,6 +77,7 @@ void Object::loadFromXml(tinyxml2::XMLElement* objectElement) {
 	//In Outer Loop 
 	n++;
       }
+      singlePlane.scale(0.001);
       objectSymmetry_.symmetryData = singlePlane;
     }
     break;
@@ -112,6 +113,7 @@ void Object::loadFromXml(tinyxml2::XMLElement* objectElement) {
 	//In Outer Loop 
 	n++;
       }
+      doublePlane.scale(0.001);
       objectSymmetry_.symmetryData = doublePlane;
     }
     break;
@@ -153,6 +155,7 @@ void Object::loadFromXml(tinyxml2::XMLElement* objectElement) {
 	//In Outer Loop 
 	n++;
       }
+      triplePlane.scale(0.001);
       objectSymmetry_.symmetryData = triplePlane;
     }
     break;
@@ -180,6 +183,7 @@ std::cout << "[Debug 60]: ValuePoint(1) " << valuesPoint.at(1) << "\n" << std::f
 	//In Outer Loop 
 	n++;
       }
+      axial.scale(0.001);
       objectSymmetry_.symmetryData = axial;
     }
     break;
@@ -237,6 +241,7 @@ std::cout << "[Debug 60]: ValuePoint(1) " << valuesPoint.at(1) << "\n" << std::f
       
       axialSinglePlane.axis1 = axis;
       axialSinglePlane.plane1 = layer;
+      axialSinglePlane.scale(0.001);
       objectSymmetry_.symmetryData = axialSinglePlane;
     }
     break;

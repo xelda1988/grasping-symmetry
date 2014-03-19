@@ -34,8 +34,6 @@
   
   void poseQuatToPoseEuler(PoseEuler & poseEuler, const PoseQuat & poseQuat);
   
-  
-  
   //getAttributesFrom XML Element
   void getAttributeList(  std::vector<float> & floatList, const std::vector<std::string> & AttributeNameList,  const tinyxml2::XMLElement* xmlElementPtr);
   void getAttributeList(  std::vector<int> & intList, const std::vector<std::string> & AttributeNameList, const tinyxml2::XMLElement* xmlElementPtr);
@@ -50,6 +48,8 @@
   std::string MatToString(const Eigen::MatrixXf& mat);
   std::vector<std::string> VecToStdVecString(const Eigen::VectorXf& vec);
   Eigen::MatrixXf StringToMat(const std::string &strg, int row,int col);
+  
+  
 //}
 
 #endif

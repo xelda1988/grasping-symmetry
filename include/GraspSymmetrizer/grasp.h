@@ -22,7 +22,7 @@ public:
   
   
   void loadFromGraspItXml(const std::string filePath); //Pointer to Element of XMLfile
-  void saveToGraspItXml(const std::string filePath);  //Needs preconfigured GraspItXml!
+  void saveToGraspItXml(const std::string layoutFilePath, const std::string saveFilePath);  //Needs preconfigured GraspItXml!
   void setGripper(const Gripper & gripper); //sets Dof and gripper Identifier
   
   void loadFromXml(tinyxml2::XMLElement* graspElement);

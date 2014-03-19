@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<world>
+	<robot>
+		<filename>models/robots/Schunk/Schunk.xml</filename>
+		<dofValues>0.352655 -0.379766 -1.35363 -0.421035 -1.06148 0 0.236322 -0.464152 </dofValues>
+		<transform>
+			<fullTransform>(+1 +0 +0 +0)[+0 +0 +0]</fullTransform>
+		</transform>
+	</robot>
+	<camera>
+		<position>-110.574 +331.429 +271.143</position>
+		<orientation>+0.0484095 -0.549077 -0.815286 +0.177428</orientation>
+		<focalDistance>+381.282</focalDistance>
+	</camera>
+</world>

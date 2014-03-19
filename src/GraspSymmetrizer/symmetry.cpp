@@ -25,12 +25,12 @@ void axisRotationMatrix(Eigen::Matrix4f & axisMat, const Axis3D axis, const floa
 	Point3D viewUp;
 	viewUp << 0,1,0;
 	
-std::cout << "[Debug:] 28" << fabs(viewUp.transpose()*w) - 1.0f << std::endl;
+// std::cout << "[Debug:] 28" << fabs(viewUp.transpose()*w) - 1.0f << std::endl;
 
 
 	if ( (fabs(viewUp.cross(w).norm()) < 0.001f)) //if they are parallel, thats bad
 	{
-std::cout << "[Debug:] 32, in if condition" << std::endl;
+// std::cout << "[Debug:] 32, in if condition" << std::endl;
 	  viewUp << 0,0,1;
 	}
 	
@@ -118,13 +118,15 @@ void SymmetryOperation::flipJointConstraintBool(const std::vector<Eigen::VectorX
   float valueTemp;
   int indexTemp=-1;
   //Flip Bool Bit must be disjoint set of 2 bits set, I do not check this here
-  
+// std::cout << "[DEBUG] 121: printing joint_constraints" << std::endl;
+
   for (int i = 0; i < jointConstraints.size(); i++)
   {
+//     std::cout << "[DEBUG] 125: printing joint_constraints at i " << i << jointConstraints.at(i).transpose() << std::endl;
     
     for (int j = 0; j < jointConfigurations.size(); j++)
     {
-      
+//       std::cout << "[DEBUG] 125: printing joint_config before inner loop at j " << j << jointConfigurations.at(j).transpose() << std::endl;
       for (int k = 0; k < jointConstraints.at(i).size(); k ++)
       {
 	if( jointConstraints.at(i)(k) == 1 && indexTemp ==-1)
@@ -138,6 +140,8 @@ void SymmetryOperation::flipJointConstraintBool(const std::vector<Eigen::VectorX
 	  jointConfigurations.at(j)(k) = valueTemp;	  
 	}
       }
+      indexTemp=-1;
+//       std::cout << "[DEBUG] 125: printing joint_config after inner loop at j " << j << jointConfigurations.at(j).transpose() << std::endl;
       
     }
     
@@ -167,6 +171,7 @@ void SymmetryOperation::reflectGrasps(const Layer3D & objectLayer, const Layer3D
       Grasp new_grasp(grasp_list.at(i));
       for(int k = 0; k < new_grasp.handPoses_.size(); k++)
       {
+	
 	new_grasp.handPoses_.at(k) = gripperReflexMatrix*objectReflexMatrix*new_grasp.handPoses_.at(k); //to be tested, e.g determinant ...
 	flipJointConstraintBool(jointConstraints, new_grasp.jointPositions_);
       }

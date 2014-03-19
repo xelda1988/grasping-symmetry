@@ -46,21 +46,30 @@ int main () {
 //   cout << "Rotated Point \n" << axisRotMat*testPoint2 << endl;
 //
   
+  
+  //Load a single grasp from graspIt:
+  const char* layoutpath="/home/alexander/workspace/GraspSymmetrizer/resources/graspit/faceplate_02_pregrasp_graspit.xml";
+  const char* savepath = "/home/alexander/workspace/GraspSymmetrizer/resources/graspit/fp_mirrored.xml";
+ 
+  Grasp graspItgrasp(layoutpath);
   //Test gripper.cpp done
+//    graspItgrasp.saveToGraspItXml(layoutpath, savepath );
   
   Gripper gripper("/home/alexander/workspace/GraspSymmetrizer/resources/SchunkDexHandConfig.xml");
 //   gripperInstance.printGripperInfo();
   
-  GraspDatabase graspDb("/home/alexander/workspace/GraspSymmetrizer/resources/GraspDatabase_base_layout.xml");
-   graspDb.printGraspDatabase();
+//   GraspDatabase graspDb("/home/alexander/workspace/GraspSymmetrizer/resources/GraspDatabase_base_layout.xml");
+//    graspDb.printGraspDatabase();
   
   ObjectDatabase objectDb("../resources/ObjectDatabase.xml");
+//   objectDb.printObjectDatabase();
   
-  SymmetryOperation symOp(gripper, objectDb.objectDb_.at(0),graspDb.graspDb_.at(0) );
+  SymmetryOperation symOp(gripper, objectDb.objectDb_.at(0), graspItgrasp );
   //z axis
   symOp.computeSymmetries();
   GraspDatabase graspDbOut = symOp.getGraspDb();
    graspDbOut.printGraspDatabase();
+   graspDbOut.graspDb_.at(1).saveToGraspItXml(layoutpath, savepath );
   /*
   
   //Test grasp.cpp 
