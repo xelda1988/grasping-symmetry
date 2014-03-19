@@ -10,7 +10,7 @@
         <filename>models/robots/Schunk/Schunk.xml</filename>
         <dofValues>0.79 -0.584688 0.559826 -0.488438 0.656076 0 -0.480313 0.664201 </dofValues>
         <transform>
-            <fullTransform>(0.0456012 0.97783 -0.198978 -0.046651)[203.411 -195.347 239.768]</fullTransform>
+            <fullTransform>(-0.0456012 0.97783 0.198978 -0.046651)[203.411 195.347 239.768]</fullTransform>
         </transform>
     </robot>
     <camera>

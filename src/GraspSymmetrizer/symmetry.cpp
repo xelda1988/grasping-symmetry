@@ -154,11 +154,18 @@ void SymmetryOperation::reflectGrasps(const Layer3D & objectLayer, const Layer3D
   std::vector<Grasp> generated_grasps;
 
   //Get reflection Matrices  
+  Eigen::Matrix4f graspitFlip;
+  graspitFlip << 2,0,0,0,
+		 0,0,1,0,
+		 0,1,0,0,
+		 0,0,0,1;
   Eigen::Matrix4f objectReflexMatrix;
   Eigen::Matrix4f gripperReflexMatrix;
-  
+  //Transform gripper layer also with grasp layer! only invert signs, hmm point by point
   reflectionMatrix(objectReflexMatrix, objectLayer);
   reflectionMatrix(gripperReflexMatrix, gripperLayer);
+  
+std::cout << "[DEBUG] 163 - Gripper Reflection Matrix" << gripperReflexMatrix << std::endl;
     
   //Apply rotation matrices to all hand_poses!
   
@@ -171,8 +178,10 @@ void SymmetryOperation::reflectGrasps(const Layer3D & objectLayer, const Layer3D
       Grasp new_grasp(grasp_list.at(i));
       for(int k = 0; k < new_grasp.handPoses_.size(); k++)
       {
-	
-	new_grasp.handPoses_.at(k) = gripperReflexMatrix*objectReflexMatrix*new_grasp.handPoses_.at(k); //to be tested, e.g determinant ...
+
+	new_grasp.handPoses_.at(k) = objectReflexMatrix*new_grasp.handPoses_.at(k)*gripperReflexMatrix;
+
+	//TransformLinkAtoB(new_grasp.handPoses_.at(k) ,graspitFlip.inverse() ); //to be tested
 	flipJointConstraintBool(jointConstraints, new_grasp.jointPositions_);
       }
       
