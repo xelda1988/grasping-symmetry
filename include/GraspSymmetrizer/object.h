@@ -22,6 +22,9 @@ public:
   ObjectSymmetry getObjectSymmetry() const{
     return objectSymmetry_;
   }
+  std::string getObjectName(){ 
+    return objectName_;  
+  }
   
   //Constructors
   Object(tinyxml2::XMLElement* objectElement) {

@@ -252,35 +252,54 @@ void SymmetryOperation::computeSymmetries(){
       Layer3D objectPlane = (boost::get<SinglePlane>(objectSymmetry_.symmetryData)).plane1;
       Layer3D gripperPlane = (boost::get<SinglePlane>(gripperSymmetry_.symmetryData)).plane1;
       std::vector<Eigen::VectorXi> jointCsBool = boost::get< std::vector<Eigen::VectorXi> > ( gripperSymmetry_.symmetryConstraint.at(0).jointConfigurations);
-      
-      //if first gripperPose is Symmetric all should be, now only gripper singleplane symmetry
-      //std::vector<Eigen::VectorXf> jointCsSinglePlane = resultingGrasps_.at(0).gripperSymmetry_.at(0).symmetryConstraint.at(0) //no symmetry constraint on this symmetry, only for C3  
-      
+        
       reflectGrasps( objectPlane, gripperPlane, resultingGrasps_, jointCsBool );
     }
     break;
   case DOUBLEPLANE: 
     {
-//       reflectGrasps( (boost::get<DoublePlane>(objectSymmetry_.symmetryData)).plane1 );
-//       reflectGrasps( (boost::get<DoublePlane>(objectSymmetry_.symmetryData)).plane2 );
+      Layer3D objectPlane1 = (boost::get<DoublePlane>(objectSymmetry_.symmetryData)).plane1;
+      Layer3D objectPlane2 = (boost::get<DoublePlane>(objectSymmetry_.symmetryData)).plane2;
+      Layer3D gripperPlane = (boost::get<SinglePlane>(gripperSymmetry_.symmetryData)).plane1;
+      std::vector<Eigen::VectorXi> jointCsBool = boost::get< std::vector<Eigen::VectorXi> > ( gripperSymmetry_.symmetryConstraint.at(0).jointConfigurations);
+        
+      reflectGrasps( objectPlane1, gripperPlane, resultingGrasps_, jointCsBool );
+      reflectGrasps( objectPlane2, gripperPlane, resultingGrasps_, jointCsBool );
+
     }
     break;
   case TRIPLEPLANE: 
     {
-//       reflectGrasps( (boost::get<TriplePlane>(objectSymmetry_.symmetryData)).plane1);
-//       reflectGrasps( (boost::get<TriplePlane>(objectSymmetry_.symmetryData)).plane2);
-//       reflectGrasps( (boost::get<TriplePlane>(objectSymmetry_.symmetryData)).plane3);      
+      Layer3D objectPlane1 = (boost::get<TriplePlane>(objectSymmetry_.symmetryData)).plane1;
+      Layer3D objectPlane2 = (boost::get<TriplePlane>(objectSymmetry_.symmetryData)).plane2;
+      Layer3D objectPlane3 = (boost::get<TriplePlane>(objectSymmetry_.symmetryData)).plane3;
+      Layer3D gripperPlane = (boost::get<SinglePlane>(gripperSymmetry_.symmetryData)).plane1;
+      std::vector<Eigen::VectorXi> jointCsBool = boost::get< std::vector<Eigen::VectorXi> > ( gripperSymmetry_.symmetryConstraint.at(0).jointConfigurations);
+        
+      reflectGrasps( objectPlane1, gripperPlane, resultingGrasps_, jointCsBool );
+      reflectGrasps( objectPlane2, gripperPlane, resultingGrasps_, jointCsBool );
+      reflectGrasps( objectPlane3, gripperPlane, resultingGrasps_, jointCsBool );
+      
     }
     break;
   case AXIAL: 
     {
-//       rotateGrasps( (boost::get<Axial>(objectSymmetry_.symmetryData)).axis1);
+      Axis3D objectAxis = (boost::get<Axial>(objectSymmetry_.symmetryData)).axis1;
+      rotateGrasps( objectAxis, resultingGrasps_ );
     }
     break;
   case AXIALSINGLEPLANE: 
     {
-//       rotateGrasps( (boost::get<AxialSinglePlane>(objectSymmetry_.symmetryData)).axis1);
-//       reflectGrasps( (boost::get<AxialSinglePlane>(objectSymmetry_.symmetryData)).plane1);
+       
+       Axis3D objectAxis = (boost::get<AxialSinglePlane>(objectSymmetry_.symmetryData)).axis1;
+       rotateGrasps( objectAxis, resultingGrasps_);
+       
+       Layer3D objectPlane = (boost::get<AxialSinglePlane>(objectSymmetry_.symmetryData)).plane1;
+       Layer3D gripperPlane = (boost::get<SinglePlane>(gripperSymmetry_.symmetryData)).plane1;
+       std::vector<Eigen::VectorXi> jointCsBool = boost::get< std::vector<Eigen::VectorXi> > ( gripperSymmetry_.symmetryConstraint.at(0).jointConfigurations);
+      
+       reflectGrasps( objectPlane, gripperPlane, resultingGrasps_, jointCsBool );
+
     }
     break;
   default: 
