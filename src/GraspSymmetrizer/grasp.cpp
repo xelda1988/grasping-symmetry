@@ -1,6 +1,8 @@
 #include "GraspSymmetrizer/grasp.h"
 #include "GraspSymmetrizer/util.h"
 
+namespace graspsym{
+  
 inline bool file_exists (const std::string& name) {
     std::ifstream f(name.c_str());
     if (f.good()) {
@@ -488,6 +490,7 @@ void GraspDatabase::saveToXml(const std::string filePath){
   }
 }
 
+}//NS
 
 
 

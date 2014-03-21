@@ -8,48 +8,50 @@
 #include "defs.h"
 #include "../tinyxml2/tinyxml2.h"
 
+namespace graspsym{
+    
+  class Object {
+    
+    int objectID_;
+    std::string objectName_;
+    ObjectSymmetry objectSymmetry_; //see defs.h for type
+    
+  public:
+    
+    void loadFromXml(tinyxml2::XMLElement* objectElement); //Pointer to Element of XMLfile
+    void printObjectInfo();
+    ObjectSymmetry getObjectSymmetry() const{
+      return objectSymmetry_;
+    }
+    std::string getObjectName() const{ 
+      return objectName_;  
+    }
+    
+    //Constructors
+    Object(tinyxml2::XMLElement* objectElement) {
+      loadFromXml(objectElement);
+    }
+    //destructor
+    //~Object();
+  };
 
-class Object {
-  
-  int objectID_;
-  std::string objectName_;
-  ObjectSymmetry objectSymmetry_; //see defs.h for type
-  
-public:
-  
-  void loadFromXml(tinyxml2::XMLElement* objectElement); //Pointer to Element of XMLfile
-  void printObjectInfo();
-  ObjectSymmetry getObjectSymmetry() const{
-    return objectSymmetry_;
-  }
-  std::string getObjectName() const{ 
-    return objectName_;  
-  }
-  
-  //Constructors
-  Object(tinyxml2::XMLElement* objectElement) {
-    loadFromXml(objectElement);
-  }
-  //destructor
-  //~Object();
-};
+  class ObjectDatabase {
+    
+    
+    
+  public:
+    
+    std::vector<Object> objectDb_;
+    void loadFromXml(const std::string filePath);
+    void printObjectDatabase();
 
-class ObjectDatabase {
-  
-  
-  
-public:
-  
-  std::vector<Object> objectDb_;
-  void loadFromXml(const std::string filePath);
-  void printObjectDatabase();
-
-  
-  ObjectDatabase (const std::string filePath){
-  
-    loadFromXml(filePath);
-  }
-  ~ObjectDatabase(){}
-};
+    
+    ObjectDatabase (const std::string filePath){
+    
+      loadFromXml(filePath);
+    }
+    ~ObjectDatabase(){}
+  };
+} //NS
   
 #endif

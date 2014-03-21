@@ -11,6 +11,7 @@
 using namespace std;
 using namespace Eigen;
 using namespace tinyxml2;
+using namespace graspsym;
 
 inline bool file_exists (const std::string& name) {
     ifstream f(name.c_str());

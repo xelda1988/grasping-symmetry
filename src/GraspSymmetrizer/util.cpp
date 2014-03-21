@@ -3,6 +3,7 @@
 #include <sstream>
 #include <limits>
 
+namespace graspsym{
 //Basic Type Conversions  
 int charArrayToInt(const char* charPtr){
   
@@ -70,7 +71,7 @@ void poseEulerToPoseQuat(PoseQuat & poseQuat, const PoseEuler & poseEuler){
   PoseMat poseMat;
   
   poseQuat.head(3)=poseEuler.head(3);
-  poseEulerToPoseMat(poseMat, poseEuler);
+  graspsym::poseEulerToPoseMat(poseMat, poseEuler);
   Eigen::Quaternionf quat(poseMat.block<3,3>(0,0));
   
   poseQuat(3)=quat.w();
@@ -129,8 +130,8 @@ void poseQuatToPoseMat(PoseMat & poseMat, const PoseQuat & poseQuat){
 //   
 void poseQuatToPoseEuler(PoseEuler & poseEuler, const PoseQuat & poseQuat){
   PoseMat poseMat;
-  poseQuatToPoseMat(poseMat, poseQuat);
-  poseMatToPoseEuler(poseEuler, poseMat);  
+  graspsym::poseQuatToPoseMat(poseMat, poseQuat);
+  graspsym::poseMatToPoseEuler(poseEuler, poseMat);  
 }
 //   
 //   //getAttributesFrom XML Element
@@ -283,7 +284,8 @@ std::vector<std::string> VecToStdVecString(const Eigen::VectorXf& vec){
   std::vector<std::string> vecStr;
   for (int i = 0; i < vec.size(); i++)
   {
-    vecStr.push_back(floatToString(vec(i)));
+    vecStr.push_back(graspsym::floatToString(vec(i)));
   }
   return vecStr;
 }
+}//NS

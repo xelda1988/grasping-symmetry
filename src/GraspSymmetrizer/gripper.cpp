@@ -2,6 +2,8 @@
 #include "GraspSymmetrizer/util.h"
 #include <limits>
 
+namespace graspsym{
+
 void Gripper::loadFromXml(std::string filePath){
  
   std::vector<std::string> attributesManipulator, 
@@ -298,25 +300,4 @@ void Gripper::printGripperInfo(){
    }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}

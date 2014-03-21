@@ -10,7 +10,7 @@
 #include "defs.h"
 #include "../tinyxml2/tinyxml2.h"
 
-//namespace GraspSymmetrizer{
+namespace graspsym{
   
   //Basic Type Conversions  
   int charArrayToInt(const char* charPtr);
@@ -52,6 +52,6 @@
   Eigen::MatrixXf StringToMat(const std::string &strg, int row,int col);
   
   
-//}
+}
 
 #endif

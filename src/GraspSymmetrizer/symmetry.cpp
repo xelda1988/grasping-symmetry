@@ -1,5 +1,6 @@
 #include "GraspSymmetrizer/symmetry.h"
 
+namespace graspsym{
 
 void reflectionMatrix(Eigen::Matrix4f & reflectionMat, const Layer3D layer){
   
@@ -360,6 +361,7 @@ void SymmetryOperation::checkSetInputGrasp(const Gripper & gripper, const Object
   }
   
 }
+}//NS
 
 
 

@@ -2,6 +2,8 @@
 #include "GraspSymmetrizer/util.h"
 #include <stdexcept>
 
+namespace graspsym{
+
 void Object::loadFromXml(tinyxml2::XMLElement* objectElement) {
  
   std::vector<std::string> attributesObject, attributesSymmetry, attributesPoint, valuesObject, valuesSymmetry;
@@ -302,4 +304,6 @@ void ObjectDatabase::printObjectDatabase(){
   for (int i = 0; i < objectDb_.size(); i++) {
     objectDb_.at(i).printObjectInfo();
   }
+}
+
 }
