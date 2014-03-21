@@ -60,8 +60,14 @@ public:
   
   std::vector<Grasp> graspDb_;
   void loadFromXml(const std::string filePath);
+  void push_back(const std::vector<Grasp> & graspDb){
+   graspDb_.insert(graspDb_.end(), graspDb.begin(), graspDb.end() );
+  }
+  void push_back(const Grasp & grasp){
+    graspDb_.push_back(grasp);
+  }
   void printGraspDatabase();
-  
+  void saveToXml(const std::string filePath); //TODO
   GraspDatabase(const std::string filePath) {
     loadFromXml(filePath); //Pass gripper through constructor
   }

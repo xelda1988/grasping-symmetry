@@ -22,7 +22,7 @@ public:
   ObjectSymmetry getObjectSymmetry() const{
     return objectSymmetry_;
   }
-  std::string getObjectName(){ 
+  std::string getObjectName() const{ 
     return objectName_;  
   }
   

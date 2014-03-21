@@ -98,6 +98,10 @@ int main () {
       GraspDatabase graspDbOut = actualSymOperation.getGraspDb();
 //       cout << "[Debug]: 80: Actual generated grasp Database:" << endl;
       graspDbOut.printGraspDatabase();
+      
+      //Save To XML
+      graspDbOut.saveToXml("/home/alexander/workspace/GraspSymmetrizer/resources/GraspDatabase_intellact.xml");
+      
       //Batch export of grasp Db
       
       for (int k = 0; k < graspDbOut.graspDb_.size(); k++){

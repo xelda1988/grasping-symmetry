@@ -18,45 +18,45 @@ void reflectionMatrix(Eigen::Matrix4f & reflectionMat, const Layer3D layer){
 void axisRotationMatrix(Eigen::Matrix4f & axisMat, const Axis3D axis, const float alpha){
 
   Point3D w,n2,ex; //tangentialvector
-	
-	w=(axis.point2-axis.point1).normalized(); //is e_z
-	
-	//create normalvector for w
-	Point3D viewUp;
-	viewUp << 0,1,0;
-	
+  
+  w=(axis.point2-axis.point1).normalized(); //is e_z
+  
+  //create normalvector for w
+  Point3D viewUp;
+  viewUp << 0,1,0;
+  
 // std::cout << "[Debug:] 28" << fabs(viewUp.transpose()*w) - 1.0f << std::endl;
 
 
-	if ( (fabs(viewUp.cross(w).norm()) < 0.001f)) //if they are parallel, thats bad
-	{
+  if ( (fabs(viewUp.cross(w).norm()) < 0.001f)) //if they are parallel, thats bad
+  {
 // std::cout << "[Debug:] 32, in if condition" << std::endl;
-	  viewUp << 0,0,1;
-	}
-	
-	n2=w.cross(viewUp).normalized();
-	
-	ex=n2.cross(w);
-	
-	Eigen::Matrix4f axislocal; // transform from axis local system to object frame
-	axislocal.col(0) << ex,0;
-	axislocal.col(1) << n2,0;
-	axislocal.col(2) << w, 0;
-	axislocal.col(3) << axis.point1,1;
-	
-	Eigen::Matrix3f rotZ;
-	rotZ = Eigen::AngleAxisf(alpha, Eigen::Vector3f::UnitZ());
-	
-	Eigen::Matrix4f rot4d;
-	rot4d.col(0) << rotZ.col(0),0;
-	rot4d.col(1) << rotZ.col(1),0;
-	rot4d.col(2) << rotZ.col(2),0;
-	rot4d.col(3) << 0,0,0,1;
-	
-	Eigen::Matrix4f axialtrans; //-> local KO -> rotation by alpha -> object frame
-		
-	axialtrans = axislocal*rot4d*axislocal.inverse();
-	axisMat = axialtrans;
+    viewUp << 0,0,1;
+  }
+  
+  n2=w.cross(viewUp).normalized();
+  
+  ex=n2.cross(w);
+  
+  Eigen::Matrix4f axislocal; // transform from axis local system to object frame
+  axislocal.col(0) << ex,0;
+  axislocal.col(1) << n2,0;
+  axislocal.col(2) << w, 0;
+  axislocal.col(3) << axis.point1,1;
+  
+  Eigen::Matrix3f rotZ;
+  rotZ = Eigen::AngleAxisf(alpha, Eigen::Vector3f::UnitZ());
+  
+  Eigen::Matrix4f rot4d;
+  rot4d.col(0) << rotZ.col(0),0;
+  rot4d.col(1) << rotZ.col(1),0;
+  rot4d.col(2) << rotZ.col(2),0;
+  rot4d.col(3) << 0,0,0,1;
+  
+  Eigen::Matrix4f axialtrans; //-> local KO -> rotation by alpha -> object frame
+	  
+  axialtrans = axislocal*rot4d*axislocal.inverse();
+  axisMat = axialtrans;
 }
 
 void axisRotationMatrixesN(std::vector<Eigen::Matrix4f> & axisMatrixes, const Axis3D axis, const float alpha, const int nrRotations){
@@ -77,15 +77,30 @@ void axisRotationMatrixesN(std::vector<Eigen::Matrix4f> & axisMatrixes, const Ax
     std::cout << "expects input vector with size 0!" << std::endl;
   }
   
-}//subsequent single rotation, gives back all but identity rotation
+}
 
-// bool SymmetryOperation::checkConstraintBool(const std::vector<Eigen::VectorXi> & jointConstraints, const std::vector<Eigen::VectorXf> & jointConfigurations ){
-//  
-//   
-//   
-// }
-
-
+void getLayerFromSymAxis(Layer3D & layer, const Axis3D & symAxis){ 
+ 
+  Point3D DeltaP1 ,pNormal; //tangentialvector
+  
+  DeltaP1=(symAxis.point2-symAxis.point1).normalized(); //is e_z
+  
+  //create normalvector for DeltaP1
+  Point3D viewUp;
+  viewUp << 0,1,0;
+  
+  if ( (fabs(viewUp.cross(DeltaP1).norm()) < 0.001f)) //if they are parallel, thats bad
+  {
+    viewUp << 0,0,1;
+  }
+  
+  pNormal=DeltaP1.cross(viewUp).normalized();
+  
+  layer.point1 = symAxis.point1;
+  layer.point2 = symAxis.point1;
+  layer.point3 = pNormal;
+  
+}
 
 
 bool SymmetryOperation::checkConstraintContinuous(const std::vector<Eigen::VectorXf> & jointConstraints, const std::vector<Eigen::VectorXf> & jointConfigurations ){
@@ -285,7 +300,12 @@ void SymmetryOperation::computeSymmetries(){
   case AXIAL: 
     {
       Axis3D objectAxis = (boost::get<Axial>(objectSymmetry_.symmetryData)).axis1;
+      std::vector<Eigen::VectorXi> jointCsBool = boost::get< std::vector<Eigen::VectorXi> > ( gripperSymmetry_.symmetryConstraint.at(0).jointConfigurations);
+      Layer3D objectPlane1;
+      Layer3D gripperPlane = (boost::get<SinglePlane>(gripperSymmetry_.symmetryData)).plane1;
+      getLayerFromSymAxis(objectPlane1, objectAxis);
       rotateGrasps( objectAxis, resultingGrasps_ );
+//       reflectGrasps( objectPlane1, gripperPlane, resultingGrasps_, jointCsBool ); //To be debugged
     }
     break;
   case AXIALSINGLEPLANE: 
@@ -294,11 +314,15 @@ void SymmetryOperation::computeSymmetries(){
        Axis3D objectAxis = (boost::get<AxialSinglePlane>(objectSymmetry_.symmetryData)).axis1;
        rotateGrasps( objectAxis, resultingGrasps_);
        
+       Layer3D objectPlane1;
+       getLayerFromSymAxis(objectPlane1, objectAxis);
+       
        Layer3D objectPlane = (boost::get<AxialSinglePlane>(objectSymmetry_.symmetryData)).plane1;
        Layer3D gripperPlane = (boost::get<SinglePlane>(gripperSymmetry_.symmetryData)).plane1;
        std::vector<Eigen::VectorXi> jointCsBool = boost::get< std::vector<Eigen::VectorXi> > ( gripperSymmetry_.symmetryConstraint.at(0).jointConfigurations);
       
        reflectGrasps( objectPlane, gripperPlane, resultingGrasps_, jointCsBool );
+//        reflectGrasps( objectPlane1, gripperPlane, resultingGrasps_, jointCsBool );
 
     }
     break;
@@ -311,3 +335,31 @@ void SymmetryOperation::computeSymmetries(){
   std::cout << "Symmetry Successfully computed!\n";
 
 }
+
+void SymmetryOperation::checkSetInputGrasp(const Gripper & gripper, const Object & object){
+  
+  if( inputGrasp_.objectIdentifier_.empty() ){
+    std::cout << "[Warning] Grasp object identifier name not set, setting from Object-name" << std::endl;
+    inputGrasp_.objectIdentifier_ = object.getObjectName();
+  }
+  else if (inputGrasp_.objectIdentifier_ != object.getObjectName()){
+    std::cout << "[Error] Grasp object identifier name mismatches Object-name " <<
+     inputGrasp_.objectIdentifier_ << " != " << object.getObjectName() << std::endl;
+   exit(EXIT_FAILURE);
+  }
+  
+  if( inputGrasp_.gripperIdentifier_.empty() ){
+    std::cout << "[Warning] Grasp gripper identifier name not set, setting from Gripper-name" << std::endl;
+    inputGrasp_.gripperIdentifier_ = gripper.getName();
+    
+  }
+  else if (inputGrasp_.gripperIdentifier_ != gripper.getName()){
+    std::cout << "[Error] Grasp gripper identifier name mismatches Gripper-name " <<
+     inputGrasp_.gripperIdentifier_ << " != " << gripper.getName() << std::endl;
+   exit(EXIT_FAILURE);
+  }
+  
+}
+
+
+

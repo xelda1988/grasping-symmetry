@@ -25,8 +25,12 @@ public:
   std::vector<GripperSymmetry> gripperSymmetry_; //also data definition
   void loadFromXml(std::string filePath); //Pointer to Element of XMLfile
   void printGripperInfo();
-  std::string getName() const;
-  int getDof() const;
+  std::string getName() const{
+  return gripperIdentifier_;
+  }
+  int getDof() const{
+  return dof_;
+  }
   //Constructors
   Gripper(std::string filePath) {
     loadFromXml(filePath);

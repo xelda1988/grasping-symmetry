@@ -216,7 +216,7 @@ void getSymmetryTypeFromString(SymmetryType & symmetryType, const std::string sy
   else if (symmetryTypeStr == "axialsingleplane") symmetryType=AXIALSINGLEPLANE;
   else if (symmetryTypeStr == "c3") symmetryType=C3;
   else 
-  {std::cout << "Objectsymmetry not correctly defined, exiting!\n";
+  {std::cout << "[Error] Objectsymmetry not correctly defined, exiting!\n";
     exit(EXIT_FAILURE);
   }
 }
@@ -226,7 +226,7 @@ void getConstraintTypeFromString(ConstraintType & constraintType, const std::str
   if(constrainTypeStr == "bool") constraintType=BOOL;
   else if (constrainTypeStr == "continuous") constraintType=CONTINUOUS;
   else 
-  {std::cout << "Constraint Symmetry not correctly defined, exiting!\n";
+  {std::cout << "[Error] Constraint Symmetry not correctly defined, exiting!\n";
     exit(EXIT_FAILURE);
   }
 }
@@ -256,7 +256,7 @@ Eigen::MatrixXf StringToMat(const std::string &strg, int row, int col)
 	      std::back_inserter(v));
 	
 	if (row || col < 1) {
-	  std::cout << "try to map number of cols or rows by logic" << std::endl;
+	  std::cout << "[Warning] Try to map number of cols or rows by logic" << std::endl;
 	  if (row < 1) {
 	    row = v.size()/col;
 	    return Eigen::Map<Eigen::MatrixXf>(v.data(),row,col); 
@@ -270,7 +270,7 @@ Eigen::MatrixXf StringToMat(const std::string &strg, int row, int col)
 	else 
 	{
 	  if (row*col != v.size()) {
-	    std::cout << "col*row is not of the size of this string - exiting program" << std::endl;
+	    std::cout << "[Error] col*row is not of the size of this string - exiting program" << std::endl;
 	    exit( EXIT_FAILURE );
 	  }
 	  else

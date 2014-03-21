@@ -12,6 +12,7 @@ void pointReflectionMatrix(Eigen::Matrix4f & reflectionMat, const Point3D point)
 void reflectionMatrix(Eigen::Matrix4f & reflectionMat, const Layer3D layer); //Point reflection Operator given layer
 void axisRotationMatrix(Eigen::Matrix4f & axisMat, const Axis3D axis, const float alpha); //thumb rule, where point1 is the top, right-handed rotation
 void axisRotationMatrixesN(std::vector<Eigen::Matrix4f> & axisMatrixes, const Axis3D axis, const float alpha, const int nrRotations); //subsequent single rotation, gives back all but identity rotation
+void getLayerFromSymAxis(Layer3D & layer, const Axis3D & symAxis);
 
 class SymmetryOperation {
  
@@ -30,6 +31,7 @@ class SymmetryOperation {
 public:
   
   void getActiveGripperSymmetry(const Grasp & grasp, SymmetryType symType); //for Current Grasp
+  void checkSetInputGrasp(const Gripper & gripper, const Object & object);
   void computeSymmetries();
     GraspDatabase getGraspDb(){
     GraspDatabase graspDb(resultingGrasps_);
@@ -41,6 +43,7 @@ public:
   {
     gripperSymmetry_ = gripper.gripperSymmetry_.at(0); //TODO Here one should have a function to check which symmetry applies for the current grasp!
     objectSymmetry_ = object.getObjectSymmetry();
+    checkSetInputGrasp(gripper, object);
     
   }
 //   ~SymmetryOperation();

@@ -97,7 +97,6 @@ struct SinglePlane {
 // std::cout << "Plane before scaling" << std::endl;
    plane1.print();
    plane1.scale(scaleFactor);
-std::cout << "Plane after scaling" << std::endl;
    plane1.print();
   }
   
@@ -184,7 +183,7 @@ struct Constraint {
     }
     break;
     default: 
-      std::cout << "Constraintsymmetry not correctly defined, exiting!\n";
+      std::cout << "[Error] Constraintsymmetry not correctly defined, exiting!\n";
       exit(EXIT_FAILURE);
       break;
     }  
@@ -222,7 +221,7 @@ struct GripperSymmetry {
       }
       break;
       default: 
-      std::cout << "Symmetrydata not correctly defined, exiting!\n";
+      std::cout << "[Error] Symmetrydata not correctly defined, exiting!\n";
       exit(EXIT_FAILURE);
       break;
     }  

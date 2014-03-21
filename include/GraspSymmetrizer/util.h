@@ -5,6 +5,8 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
+#include <fstream>
 #include "defs.h"
 #include "../tinyxml2/tinyxml2.h"
 

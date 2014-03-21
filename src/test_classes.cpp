@@ -48,7 +48,7 @@ int main () {
   
   
   //Load a single grasp from graspIt:
-  const char* layoutpath="/home/alexander/workspace/GraspSymmetrizer/resources/graspit/faceplate_02_pregrasp_graspit.xml";
+  const char* layoutpath="/home/alexander/workspace/GraspSymmetrizer/resources/graspit/faceplate_1_grasp_graspit.xml";
   const char* savepath = "/home/alexander/workspace/GraspSymmetrizer/resources/graspit/fp_mirrored.xml";
  
   Grasp graspItgrasp(layoutpath);
@@ -68,8 +68,10 @@ int main () {
   //z axis
   symOp.computeSymmetries();
   GraspDatabase graspDbOut = symOp.getGraspDb();
+  
    graspDbOut.printGraspDatabase();
-   graspDbOut.graspDb_.at(1).saveToGraspItXml(layoutpath, savepath );
+   graspDbOut.saveToXml("/home/alexander/workspace/GraspSymmetrizer/resources/graspDb_gen.xml");
+//    graspDbOut.graspDb_.at(1).saveToGraspItXml(layoutpath, savepath );
   /*
   
   //Test grasp.cpp 

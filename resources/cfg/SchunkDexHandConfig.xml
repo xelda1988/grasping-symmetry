@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Joint1=coupled palm joint, Joint23=thumb:proximal->distal, Joint45=finger1_top_view_left_of_thumb (thumb at bottom):proximal->distal, Joint67=finger2_top_view_right_of_thumb:proximal->distal  -->
+<robot>
+  <manipulator name="Schunk Dextrous Hand" dof="7">
+    <global_pose x="0.0" y="0.0" z="0.0" roll="0.0" pitch="0.0" yaw="0.0"></global_pose>
+    <joint_configuration j1="0" j2="0" j3="0" j4="0" j5="0" j6="0" j7="0"></joint_configuration>
+    <symmetry type="singleplane">
+      <!-- Symmetrystate 1: Res
+triction: J4,J5=J6,J7, handframe such that 0,0,0 is in the center, along + zAxis is the front and xz-layer is reflective layer -->
+      <constraint type="bool">
+	<joint_configuration j1="0" j2="0" j3="0" j4="1" j5="0" j6="1" j7="0"></joint_configuration>
+	<joint_configuration j1="0" j2="0" j3="0" j4="0" j5="1" j6="0" j7="1"></joint_configuration>
+      </constraint>
+      <symmetryData>
+	<layer>
+	    <point x="0" y="0" z="0"></point>
+	    <point x="0.01905" y="0" z="0"></point>
+	    <point x="0" y="0" z="1"></point>
+	</layer>
+      </symmetryData>
+    </symmetry>
+    <symmetry type="c3">
+      <!-- Symmetrystate 2 (C30=120deg axial): Restriction: J2,J3=J4,J5=J6,J7; J1=30deg, it is by order linked to the layer! -->
+      <constraint type="bool">
+	<!-- Flip Layer 1 j4<=>j6, j5<=>j7 -->
+	<joint_configuration j1="0" j2="0" j3="0" j4="1" j5="0" j6="1" j7="0"></joint_configuration>
+	<joint_configuration j1="0" j2="0" j3="0" j4="0" j5="1" j6="0" j7="1"></joint_configuration>
+	<!-- Flip Layer 2 j2<=>j6, j3<=>j7-->
+	<joint_configuration j1="0" j2="1" j3="0" j4="0" j5="0" j6="1" j7="0"></joint_configuration>
+	<joint_configuration j1="0" j2="0" j3="1" j4="0" j5="0" j6="0" j7="1"></joint_configuration>
+	<!-- Flip Layer 3 j2<=>j4, j3<=>j5-->
+	<joint_configuration j1="0" j2="1" j3="0" j4="1" j5="0" j6="0" j7="0"></joint_configuration>
+	<joint_configuration j1="0" j2="0" j3="1" j4="0" j5="1" j6="0" j7="0"></joint_configuration>
+      </constraint>
+      <constraint type="continuous">
+	<joint_configuration j1="30" j2="NaN" j3="NaN" j4="NaN" j5="NaN" j6="NaN" j7="NaN"></joint_configuration>
+      </constraint>
+      <symmetryData>
+	<axis>
+	    <point x="0" y="0" z="0"></point>
+	    <point x="0" y="0" z="1"></point>
+	</axis>
+	<layer>
+	    <point x="0" y="0" z="0"></point>
+	    <point x="0.01905" y="0" z="0"></point>
+	    <point x="0" y="0" z="1"></point>
+	</layer>
+	<layer>
+	  <point x="0" y="0" z="0"></point>
+	  <point x="-0.0095300" y="0.0165" z="0"></point>
+	  <point x="0" y="0" z="1"></point>
+	</layer>
+	<layer>
+	  <point x="0" y="0" z="0"></point>
+	  <point x="-0.0095300" y="-0.0165" z="0"></point>
+	  <point x="0" y="0" z="1"></point>
+	</layer>
+      </symmetryData>
+    </symmetry>
+  </manipulator>
+</robot>

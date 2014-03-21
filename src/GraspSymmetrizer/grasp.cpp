@@ -1,6 +1,17 @@
 #include "GraspSymmetrizer/grasp.h"
 #include "GraspSymmetrizer/util.h"
 
+inline bool file_exists (const std::string& name) {
+    std::ifstream f(name.c_str());
+    if (f.good()) {
+        f.close();
+        return true;
+    } else {
+        f.close();
+        return false;
+    }   
+}
+
 
 void Grasp::setGripper(const Gripper & gripper){
   gripperIdentifier_ = gripper.getName();
@@ -72,7 +83,7 @@ void Grasp::loadFromXml(tinyxml2::XMLElement* graspElement){
   }
   else 
   {
-    std::cout << "Error: grasp XMLPtr is NULL, exiting\n";
+    std::cout << "[Error] grasp XMLPtr is NULL, exiting\n";
     exit(EXIT_FAILURE);
   }
 }
@@ -149,7 +160,7 @@ void Grasp::loadFromGraspItXml(const std::string filePath){
       }
   
     
-std::cout << "[Debug:] Hand and Object Pose from GraspIt as a string" << poseObject << poseHand << std::endl;
+// std::cout << "[Debug:] Hand and Object Pose from GraspIt as a string" << poseObject << poseHand << std::endl;
     
     actPose = StringToMat( poseObject, 1 , 7 ).transpose();
     positionObject = actPose.tail(3)*0.001; //conversion to m
@@ -169,18 +180,18 @@ std::cout << "[Debug:] Hand and Object Pose from GraspIt as a string" << poseObj
     objectPose.block<3,3>(0,0) = orientationObject.toRotationMatrix();
     objectPose.col(3) << positionObject,1;
     
-std::cout << "[Debug:] ObjectPose \n" << objectPose << std::endl;
+// std::cout << "[Debug:] ObjectPose \n" << objectPose << std::endl;
     
     handPose.block<3,3>(0,0) = orientationHand.toRotationMatrix();
     handPose.col(3) << positionHand,1;
-std::cout << "[Debug:] HandPose\n" << handPose << std::endl;
+// std::cout << "[Debug:] HandPose\n" << handPose << std::endl;
   //      cout <<"[debug] 4 Matrixes from Quaternion ..." << positionHand << positionObject << orientationHand.toRotationMatrix() << orientationObject.toRotationMatrix() << endl;
     
     PoseMat graspPose = objectPose.inverse()*handPose;
     
     //One should check here for a global-Pose Offset, by comparing the kinematics file
     
-std::cout << "[Debug:] GraspPose: \n" << graspPose << std::endl;
+// std::cout << "[Debug:] GraspPose: \n" << graspPose << std::endl;
     
   
   //Getting hand joints:
@@ -195,7 +206,7 @@ std::cout << "[Debug:] GraspPose: \n" << graspPose << std::endl;
   myConventionJoints(5) = actJoints(3);
   myConventionJoints(6) = actJoints(4);
 
-std::cout << "[Debug:] HandJoints: \n" << myConventionJoints << std::endl;
+// std::cout << "[Debug:] HandJoints: \n" << myConventionJoints << std::endl;
   
   handPoses_.push_back(graspPose);
   jointPositions_.push_back(myConventionJoints);
@@ -204,7 +215,8 @@ std::cout << "[Debug:] HandJoints: \n" << myConventionJoints << std::endl;
     
   }
   else {  
-    std::cout << "Document Parsing Error: " << filePath << "exiting" << std::endl;
+    std::cout << "[Error] Document Parsing Error: " << filePath << "\n exiting" << std::endl;
+    exit(EXIT_FAILURE);
   }
 }
 
@@ -212,17 +224,30 @@ void Grasp::addToXml(std::string filePath){
   
   //write to .xml directly  
   tinyxml2::XMLDocument doc;
-  doc.LoadFile(filePath.c_str());
   
-  if (!doc.Error()) {
-    std::cout << "Document successfully loaded: " << filePath << std::endl;
-  }
-  else {
-    std::cout << "Document Parsing Error: " << filePath << "exiting" << std::endl;
-    exit(EXIT_FAILURE);
-  }
+   if (file_exists(filePath)){
+   
+    doc.LoadFile(filePath.c_str());
+    
+    if (!doc.Error()) {
+      std::cout << "Document successfully loaded: " << filePath << std::endl;
+    }
+    else {
+      std::cout << "[Error] Document Parsing Error: " << filePath << "not overwriting - exit!" << std::endl;
+      exit(EXIT_FAILURE);
+    }
+   }
+   else {
   
   //Add body
+  static const char* xml =
+		"<?xml version=\"1.0\"?>"
+		"<graspdatabase>"
+		"</graspdatabase>";
+  
+  doc.Parse( xml );
+   }
+  
   tinyxml2::XMLElement* graspDbPtr = doc.FirstChildElement("graspdatabase");
   
   std::vector<std::string> elementNames;
@@ -333,7 +358,7 @@ void Grasp::addToXml(std::string filePath){
   }
   else 
   {
-    std::cout << "Error: grasp XMLPtr is NULL, exiting\n";
+    std::cout << "[Error] grasp XMLPtr is NULL, exiting\n";
     exit(EXIT_FAILURE);
   }
 
@@ -348,7 +373,7 @@ void GraspDatabase::loadFromXml(const std::string filePath){
     std::cout << "Document successfully loaded: " << filePath << std::endl;
   }
   else {
-    std::cout << "Document Parsing Error: " << filePath << " exiting" << std::endl;
+    std::cout << "[Error] Document Parsing Error: " << filePath << " exiting" << std::endl;
     exit(EXIT_FAILURE);
   }
   
@@ -363,7 +388,7 @@ void GraspDatabase::loadFromXml(const std::string filePath){
   }
   else 
   {
-    std::cout << "Error: grasp XMLPtr is NULL, exiting\n";
+    std::cout << "[Error] grasp XMLPtr is NULL, exiting\n";
     exit(EXIT_FAILURE);
   }
   
@@ -439,7 +464,7 @@ void Grasp::saveToGraspItXml(const std::string layoutFilePath, const std::string
     
   }
   else {  
-    std::cout << "Document Parsing Error: " << layoutFilePath << "exiting" << std::endl;
+    std::cout << "[Error] Document Parsing Error: " << layoutFilePath << "exiting" << std::endl;
   }
   
   
@@ -450,19 +475,18 @@ void GraspDatabase::printGraspDatabase(){
   std::cout << "Grasp Database: " << std::endl;
   for(int i = 0; i < graspDb_.size(); i++)
   {
+    std::cout << "Grasp Number: " << i << std::endl;
     graspDb_.at(i).printGrasp();
   }
   
 }
 
-
-
-
-
-
-
-
-
+void GraspDatabase::saveToXml(const std::string filePath){
+  
+  for (int i = 0; i < graspDb_.size(); i++){   
+    graspDb_.at(i).addToXml(filePath);    
+  }
+}
 
 
 

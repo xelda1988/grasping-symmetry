@@ -1,7 +1,7 @@
 #files in bin and build
 resources/graspit
-resources/intellact_mesh
-resources/pacman_mesh
+resources/intellact
+resources/pacman
 build/*
 bin/*
 # Compiled Object files

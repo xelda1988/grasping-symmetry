@@ -298,13 +298,9 @@ void Gripper::printGripperInfo(){
    }
 }
 
-std::string Gripper::getName() const{
-  return gripperIdentifier_;
-}
 
-int Gripper::getDof() const{
-  return dof_;
-}
+
+
 
 
 
